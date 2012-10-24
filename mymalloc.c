@@ -13,6 +13,9 @@ typedef struct header
 
 int myinit(int *array, int size)
 {
+	array[0] = size;
+	
+
 }
 
 int mymalloc(int *array, int size)
