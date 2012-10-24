@@ -13,6 +13,8 @@ typedef struct header
 
 int myinit(int *array, int size)
 {
+	if (size < 14) return 0;
+
 	array[0] = size;
 
 	header* firstheader = (header *)&array[1];
