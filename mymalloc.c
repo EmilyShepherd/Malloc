@@ -38,7 +38,7 @@ int* mymalloc(int *array, int size)
 			
 			if (curheader->size > size + sizeof(header))
 			{
-				header* newHeader = (header *)(&curheader + size);
+				header* newHeader = (header *)((char *)curheader + size);
 				newHeader->free   = 0;
 				newHeader->size   = curheader->size - size - sizeof(header);
 				newHeader->next   = curheader->next;
