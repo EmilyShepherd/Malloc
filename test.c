@@ -4,6 +4,7 @@
 int main()
 {
 	int *array = malloc(500 * sizeof(int));
+	char *arr  = (char *)array;
 
 	printf("Myinit: %d \n", myinit(array, 500));
 
@@ -14,7 +15,13 @@ int main()
 	int *otherArray = malloc(10 * sizeof(int));
 	printf("Is the other array wrong? %d\n", mydispose(otherArray));
 
-	int *p = (int *)mymalloc(array, 2);
+	int p = mymalloc(array, 2);
 
-	printf("%p", p);
+	//printf("%d \n %d \n\n", (int)array, p);
+
+	//Show what's in the array:
+	for (int i = 0; i < 100; i++)
+	{
+		printf("%d: %d\n", i, array[i]);
+	}
 }

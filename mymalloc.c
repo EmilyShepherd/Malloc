@@ -1,12 +1,12 @@
 typedef struct header
 {
+	struct header *next;
+
 	/**
 	 * 0 = Free
 	 * 1 = Used
 	 */
-	char free;
-	
-	struct header *next;
+	int free;
 
 	int size;
 } header;
