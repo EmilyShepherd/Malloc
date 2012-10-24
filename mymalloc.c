@@ -10,3 +10,19 @@ typedef struct header
 
 	int size;
 } header;
+
+int myinit(int *array, int size)
+{
+}
+
+int mymalloc(int *array, int size)
+{
+}
+
+int myfree(int *array, int * block)
+{
+}
+
+int mydispose(int *array)
+{
+}
