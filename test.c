@@ -13,4 +13,8 @@ int main()
 	//positives
 	int *otherArray = malloc(10 * sizeof(int));
 	printf("Is the other array wrong? %d\n", mydispose(otherArray));
+
+	int *p = (int *)mymalloc(array, 2);
+
+	printf("%p", p);
 }

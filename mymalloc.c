@@ -45,7 +45,7 @@ int* mymalloc(int *array, int size)
 				curheader->next   = newHeader;
 			}
 
-			return (int *)(curheader + sizeof(header));
+			return (int *)((char *)curheader + sizeof(header));
 		}
 
 		//Get the next memory block to inspect it.
@@ -56,7 +56,7 @@ int* mymalloc(int *array, int size)
 		}
 		else
 		{
-			return 0;
+			return (int *)0;
 		}
 	}
 }
