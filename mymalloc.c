@@ -32,7 +32,7 @@ int* mymalloc(int *array, int size)
 
 	while (1)
 	{
-		if (curheader->free && curheader->size >= size)
+		if (curheader->free == 0 && curheader->size >= size)
 		{
 			curheader->free = 1;
 			
