@@ -25,8 +25,40 @@ int myinit(int *array, int size)
 	return 1;
 }
 
-int mymalloc(int *array, int size)
+int* mymalloc(int *array, int size)
 {
+	char*   arr       = (char *)array;
+	header* curheader = (header *)&array[1];
+
+	while (1)
+	{
+		if (curheader->free && curheader->size >= size)
+		{
+			curheader->free = 1;
+			
+			if (curheader->size > size + sizeof(header))
+			{
+				header* newHeader = (header *)(&curheader + size);
+				newHeader->free   = 0;
+				newHeader->size   = curheader->size - size - sizeof(header);
+				newHeader->next   = curheader->next;
+				curheader->next   = newHeader;
+			}
+
+			return (int *)(curheader + sizeof(header));
+		}
+
+		//Get the next memory block to inspect it.
+		//If there are no more, we have run out of memory
+		if (curheader->next)
+		{
+			curheader = curheader->next;
+		}
+		else
+		{
+			return 0;
+		}
+	}
 }
 
 int myfree(int *array, int * block)
