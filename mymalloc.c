@@ -14,8 +14,13 @@ typedef struct header
 int myinit(int *array, int size)
 {
 	array[0] = size;
-	
 
+	header* firstheader = (header *)&array[1];
+	firstheader->free   = 0;
+	firstheader->size   = size - sizeof(header) - sizeof(int);
+	firstheader->next   = 0;
+
+	return 1;
 }
 
 int mymalloc(int *array, int size)
