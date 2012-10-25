@@ -24,8 +24,17 @@ int main()
 
 	int *pointer = mymalloc(array, 1);
 	*pointer = 5;
+	int *pointer2 = mymalloc(array, 1);
+	*pointer2 = 10;
+
 	printf("My pointer points to: %p \n", (void *)pointer);
 	printf("My pointer points to: %d \n", *pointer);
+
+	show_array(array);
+
+	printf("My pointer points to: %p \n", (void *)pointer2);
+	printf("My pointer points to: %d \n", *pointer2);
+
 	//printf("My pointer points to: %d \n", mymalloc(array, 1));
 	printf("My array points to: %p \n", (void *)array);
 

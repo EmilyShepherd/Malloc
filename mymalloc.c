@@ -13,6 +13,7 @@ int* mymalloc(int *array, int size)
 {
 	//char*   arr       = (char *)array;
 	int curheader = 1;
+	int oldheader = 0;
 
 	while (1)
 	{
@@ -36,6 +37,17 @@ int* mymalloc(int *array, int size)
 			return &array[curheader+1];
 		}
 
+		if (array[curheader] < 0)
+		{
+			curheader += -1*array[curheader] + 1;
+		}
+		else
+		{
+			curheader += array[curheader] + 1;
+		}
+
+		if (curheader > array[0]) return (int *) 0;
+		
 	} 
 
 
