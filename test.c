@@ -36,15 +36,18 @@ int main()
 	printf("Myinit: %d \n", myinit(array, 500));
 
 	printf("Is the array initialised? %d\n", mydispose(array));
-
+  
 	//Test with another random array to make sure we don't have false
 	//positives
 	int *otherArray = malloc(10 * sizeof(int));
 	printf("Is the other array wrong? %d\n", mydispose(otherArray));
-
+  
 	int *pointer = malloc_test(array, 1, 101);
 	int *pointer2 = malloc_test(array, 1, 102);
 
+  printf("Is the array initialised (and empty) now? %d\n", mydispose(array));
+  
+  /*
 	show_array(array);
 
 	printf("\nFREEING MEMORY\n");
@@ -64,10 +67,12 @@ int main()
 	
 	show_array(array);
 	
+	*/
+	
 	//Use the pointers for nothing, so the compiler doesn't complain
 	//it's unused
-	if (*pointer3 + *pointer6 + *pointer5) {}
-
+	if (*pointer + *pointer2) {}
+  
 	return 0;
 }
 
