@@ -45,17 +45,36 @@ int* mymalloc(int *array, int size)
 		}
 
 		if (curheader > array[0]) return (int *) 0;
-		
 	} 
 
 
 
 }
 
-int myfree(int *array, int * block)
+int myfree(int *array, int *block)
 {
-	//Always fail, until implemented
-	return 0;
+	int curheader = 1;
+	
+	while (1)
+	{
+		if (&array[curheader + 1] == block)
+		{
+			//found the block, we must destroy it.
+
+			return 1;
+		}
+
+		if (array[curheader] < 0)
+		{
+			curheader += -1*array[curheader] + 1;
+		}
+		else
+		{
+			curheader += array[curheader] + 1;
+		}
+
+		if (curheader > array[0]) return 0;
+	}
 }
 
 int mydispose(int *array)
