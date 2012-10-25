@@ -11,9 +11,7 @@ int myinit(int *array, int size)
 
 int* mymalloc(int *array, int size)
 {
-	//char*   arr       = (char *)array;
 	int curheader = 1;
-	int oldheader = 0;
 
 	while (1)
 	{
