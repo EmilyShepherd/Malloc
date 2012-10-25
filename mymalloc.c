@@ -65,17 +65,42 @@ int* mymalloc(int *array, int size)
 
 int myfree(int *array, int *block)
 {
-	int curheader = 1;
+	int curheader  = 1;
+	int lastheader = 0;
 	
 	while (1)
 	{
 		if (&array[curheader + 1] == block)
 		{
-			//found the block, we must destroy it.
+			//This block exists, but it is not being used
+			//ignore this free request
+			if (array[curheader] > 0)
+			{
+				return 0;
+			}
+
+			//Mark it as free
+			array[curheader] *= -1;
+
+			int nextheader = curheader + 1 + array[curheader];
+
+			//Next block is free - combine
+			if (array[nextheader] > 0)
+			{
+				array[curheader] += array[nextheader] + 1;
+			}
+
+			//Last block is free - combine
+			if (array[lastheader] > 0)
+			{
+				array[lastheader] += array[curheader] + 1;
+			}
 
 			return 1;
 		}
 
+		//Save this header and move unto the next one
+		lastheader = curheader;
 		if (!inc_header(array, &curheader)) return 0;
 	}
 }

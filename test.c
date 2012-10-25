@@ -5,7 +5,7 @@ void show_array(int *);
 int myinit(int *, int);
 int* mymalloc(int *, int);
 int mydispose(int *);
-int myfree(int *);
+int myfree(int *, int *);
 
 int main()
 {
@@ -20,24 +20,22 @@ int main()
 	int *otherArray = malloc(10 * sizeof(int));
 	printf("Is the other array wrong? %d\n", mydispose(otherArray));
 
-	show_array(array);
-
 	int *pointer = mymalloc(array, 1);
 	*pointer = 5;
 	int *pointer2 = mymalloc(array, 1);
 	*pointer2 = 10;
 
-	printf("My pointer points to: %p \n", (void *)pointer);
-	printf("My pointer points to: %d \n", *pointer);
+	show_array(array);
+
+	printf("\nFREEING MEMORY\n");
+	printf("Free first pointer: %d\n\n", myfree(array, pointer));
 
 	show_array(array);
 
-	printf("My pointer points to: %p \n", (void *)pointer2);
-	printf("My pointer points to: %d \n", *pointer2);
-
-	//printf("My pointer points to: %d \n", mymalloc(array, 1));
-	printf("My array points to: %p \n", (void *)array);
-
+	printf("\nASKING FOR NEW SPACE\n");
+	int *pointer3 = mymalloc(array, 1);
+	*pointer3 = 28;
+	
 	show_array(array);
 
 	return 0;
