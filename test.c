@@ -12,6 +12,12 @@ int* malloc_test(int *array, int size, int id)
 {
     int *newArray = mymalloc(array, size);
     
+    if (newArray == (int *)0)
+    {
+        printf("mymalloc couldn't give array of size %d\n", size);
+        return (int *)0;
+    }
+    
     for (int i = 0; i < size; i++)
     {
         newArray[i] = id;
@@ -66,45 +72,14 @@ void init(int size)
 
 int main()
 {
-	init(100);
+	init(50);
   
-	int *pointer = malloc_test(array, 1, 101);
-	int *pointer2 = malloc_test(array, 1, 102);
-
-  printf("Is the array initialised (and empty) now? %d\n", mydispose(array));
-  
-  myfree(array, pointer);
-  myfree(array, pointer2);
-  
-  show_array();
-  
-  printf("Is the array empty now? %d\n", mydispose(array));
-  
-  /*
-	show_array();
-
-	printf("\nFREEING MEMORY\n");
-	printf("Free first pointer: %d\n\n", free_test(array, pointer, 1));
-
-	show_array();
-
-	printf("\nASKING FOR NEW SPACE\n");
-	int *pointer3 = malloc_test(array, 1, 103);
-	int *pointer4 = malloc_test(array, 2, 104);
-	int *pointer5 = malloc_test(array, 2, 105);
-
-	free_test(array, pointer2, 1);
-	free_test(array, pointer4, 2);
-
-	int *pointer6 = malloc_test(array, 3, 106);
+	malloc_test(array, 50, 101);
+	malloc_test(array, 49, 101);
+	malloc_test(array, 48, 101);
+	malloc_test(array, 47, 101);
 	
 	show_array();
-	
-	*/
-	
-	//Use the pointers for nothing, so the compiler doesn't complain
-	//it's unused
-	if (*pointer + *pointer2) {}
   
 	return 0;
 }
