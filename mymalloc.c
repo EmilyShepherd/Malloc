@@ -85,7 +85,7 @@ int myfree(int *array, int *block)
 			int nextheader = curheader + 1 + array[curheader];
 
 			//Next block is free - combine
-			if (array[nextheader] > 0)
+			if (nextheader < array[0] && array[nextheader] > 0)
 			{
 				array[curheader] += array[nextheader] + 1;
 			}
