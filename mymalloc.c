@@ -23,7 +23,7 @@ int* mymalloc(int *array, int size)
 			if (size + 1 < array[curheader])
 			{
 				// Allocate space, then put header after data for new section of free data
-				array[curheader + size] = array[curheader] - size;
+				array[curheader + size + 1] = array[curheader] - size;
 				array[curheader] = -1*size;
 
 			} 
