@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void show_array(int *);
 int myinit(int *, int);
 int* mymalloc(int *, int);
 int mydispose(int *);
 int myfree(int *, int *);
+
+int *array;
 
 int* malloc_test(int *array, int size, int id)
 {
@@ -29,18 +30,43 @@ int free_test(int *array, int *block, int size)
     return myfree(array, block);
 }
 
+void show_array(int *array)
+{
+	for (int i = 0; i < 100; i++)
+	{
+		printf("%d: %d\n", i, array[i]);
+	}
+}
+
+void init(int size)
+{
+    array = malloc(size * sizeof(int));
+    
+    if (!myinit(array, size))
+    {
+        printf("!!! myinit() failed !!!\n");
+    }
+    
+    if (!mydispose(array))
+    {
+        printf("!!! mydispose() failed after myinit() !!!\n");
+    }
+    
+    //Test with another random array to make sure we don't have false
+    //positives
+    int *otherArray = malloc(sizeof(int));
+    
+    if (mydispose(otherArray))
+    {
+        printf("!!! mydispose() returing false positive !!!\n");
+    }
+    
+    free(otherArray);
+}
+
 int main()
 {
-	int *array = malloc(500 * sizeof(int));
-
-	printf("Myinit: %d \n", myinit(array, 500));
-
-	printf("Is the array initialised? %d\n", mydispose(array));
-  
-	//Test with another random array to make sure we don't have false
-	//positives
-	int *otherArray = malloc(10 * sizeof(int));
-	printf("Is the other array wrong? %d\n", mydispose(otherArray));
+	init(100);
   
 	int *pointer = malloc_test(array, 1, 101);
 	int *pointer2 = malloc_test(array, 1, 102);
@@ -81,12 +107,4 @@ int main()
 	if (*pointer + *pointer2) {}
   
 	return 0;
-}
-
-void show_array(int *array)
-{
-	for (int i = 0; i < 100; i++)
-	{
-		printf("%d: %d\n", i, array[i]);
-	}
 }
