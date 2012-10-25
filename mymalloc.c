@@ -107,11 +107,8 @@ int myfree(int *array, int *block)
 
 int mydispose(int *array)
 {
-/*	header* firstheader = (header *)&array[1];
 
-	if (firstheader->free != 0) return 0;
-	if (firstheader->size != array[0] - sizeof(header) - sizeof(int)) return 0;
-	if (firstheader->next != 0) return 0;
-*/
-	return 1; 
+	// Return one if free space pointer correctly pointers to the rest of the array
+	if (array[1] = array[0] -2) return 1;
+	return 0; 
 }
