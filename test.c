@@ -35,6 +35,17 @@ int main()
 	printf("\nASKING FOR NEW SPACE\n");
 	int *pointer3 = mymalloc(array, 1);
 	*pointer3 = 28;
+
+	int *pointer4 = mymalloc(array, 2);
+	*pointer4 = 28;
+	int *pointer5 = mymalloc(array, 2);
+	*pointer5 = 69;
+
+	myfree(array, pointer2);
+	myfree(array, pointer4);
+
+	int *pointer6 = mymalloc(array, 3);
+	*pointer6 = 101;
 	
 	show_array(array);
 
