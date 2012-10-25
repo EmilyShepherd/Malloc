@@ -91,7 +91,7 @@ int myfree(int *array, int *block)
 			}
 
 			//Last block is free - combine
-			if (array[lastheader] > 0)
+			if (lastheader != 0 && array[lastheader] > 0)
 			{
 				array[lastheader] += array[curheader] + 1;
 			}
