@@ -2,47 +2,42 @@ int myinit(int *array, int size)
 {
 	if (size < 14) return 0;
 
-	//array[0] = size;
+	array[0] = size;
 
-	array[0] = size - 1;
+	array[1] = size - 2;
 
 	return 1;
 }
 
 int* mymalloc(int *array, int size)
 {
-	/* char*   arr       = (char *)array;
-	header* curheader = (header *)&array[1];
+	//char*   arr       = (char *)array;
+	int curheader = 1;
 
 	while (1)
 	{
-		if (curheader->free == 0 && curheader->size >= size)
+		// positive header int, implies free space of this size
+		if (array[curheader] >= size)
 		{
-			curheader->free = 1;
 			
-			if (curheader->size > size + sizeof(header))
+			if (size + 1 < array[curheader])
 			{
-				header* newHeader = (header *)((char *)curheader + size);
-				newHeader->free   = 0;
-				newHeader->size   = curheader->size - size - sizeof(header);
-				newHeader->next   = curheader->next;
-				curheader->next   = newHeader;
+				// Allocate space, then put header after data for new section of free data
+				array[curheader + size] = array[curheader] - size;
+				array[curheader] = -1*size;
+
+			} 
+			else
+			{
+				// No size for a new header, the entire array is being used
+				array[curheader] *= -1; 	
 			}
 
-			return (int *)((char *)curheader + sizeof(header));
+			return &array[curheader+1];
 		}
 
-		//Get the next memory block to inspect it.
-		//If there are no more, we have run out of memory
-		if (curheader->next)
-		{
-			curheader = curheader->next;
-		}
-		else
-		{
-			return (int*) 0;
-		}
-	} */
+	} 
+
 
 
 }

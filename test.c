@@ -15,10 +15,11 @@ int main()
 	int *otherArray = malloc(10 * sizeof(int));
 	printf("Is the other array wrong? %d\n", mydispose(otherArray));
 
-	int *pointer = malloc(sizeof(int));
+	int *pointer = mymalloc(array, 1);
 	*pointer = 5;
 	printf("My pointer points to: %p \n", pointer);
-	printf("My pointer points to: %d \n", mymalloc(array, 1));
-	//printf("My array points to: %p \n", array);
+	printf("My pointer points to: %d \n", *pointer);
+	//printf("My pointer points to: %d \n", mymalloc(array, 1));
+	printf("My array points to: %p \n", array);
 
 }
