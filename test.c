@@ -47,6 +47,13 @@ int main()
 
   printf("Is the array initialised (and empty) now? %d\n", mydispose(array));
   
+  myfree(array, pointer);
+  myfree(array, pointer2);
+  
+  show_array(array);
+  
+  printf("Is the array empty now? %d\n", mydispose(array));
+  
   /*
 	show_array(array);
 
