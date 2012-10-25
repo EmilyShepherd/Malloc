@@ -9,7 +9,7 @@ int inc_header(int *array, int *curheader)
 		*curheader += array[*curheader] + 1;
 	}
 
-	if (*curheader > array[0])
+	if (*curheader >= array[0])
 	{
 		return 0;
 	}
