@@ -1,3 +1,24 @@
+int inc_header(int *array, int *curheader)
+{
+	if (array[*curheader] < 0)
+	{
+		*curheader += -1*array[*curheader] + 1;
+	}
+	else
+	{
+		*curheader += array[*curheader] + 1;
+	}
+
+	if (*curheader > array[0])
+	{
+		return 0;
+	}
+	else
+	{
+		return 1;
+	}
+}
+
 int myinit(int *array, int size)
 {
 	if (size < 14) return 0;
@@ -35,16 +56,7 @@ int* mymalloc(int *array, int size)
 			return &array[curheader+1];
 		}
 
-		if (array[curheader] < 0)
-		{
-			curheader += -1*array[curheader] + 1;
-		}
-		else
-		{
-			curheader += array[curheader] + 1;
-		}
-
-		if (curheader > array[0]) return (int *) 0;
+		if (!inc_header(array, &curheader)) return (int *) 0;
 	} 
 
 
@@ -64,16 +76,7 @@ int myfree(int *array, int *block)
 			return 1;
 		}
 
-		if (array[curheader] < 0)
-		{
-			curheader += -1*array[curheader] + 1;
-		}
-		else
-		{
-			curheader += array[curheader] + 1;
-		}
-
-		if (curheader > array[0]) return 0;
+		if (!inc_header(array, &curheader)) return 0;
 	}
 }
 
