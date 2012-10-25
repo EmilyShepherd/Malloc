@@ -109,6 +109,6 @@ int mydispose(int *array)
 {
 
 	// Return one if free space pointer correctly pointers to the rest of the array
-	if (array[1] = array[0] -2) return 1;
+	if (array[1] == array[0] - 2) return 1;
 	return 0; 
 }
