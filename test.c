@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void show_array(int *);
+
 int main()
 {
 	int *array = malloc(500 * sizeof(int));
@@ -22,4 +24,13 @@ int main()
 	//printf("My pointer points to: %d \n", mymalloc(array, 1));
 	printf("My array points to: %p \n", array);
 
+	show_array(array);
+}
+
+void show_array(int *array)
+{
+	for (int i = 0; i < 100; i++)
+	{
+		printf("%d: %d\n", i, array[i]);
+	}
 }
