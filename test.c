@@ -2,11 +2,14 @@
 #include <stdlib.h>
 
 void show_array(int *);
+int myinit(int *, int);
+int* mymalloc(int *, int);
+int mydispose(int *);
+int myfree(int *);
 
 int main()
 {
 	int *array = malloc(500 * sizeof(int));
-	char *arr  = (char *)array;
 
 	printf("Myinit: %d \n", myinit(array, 500));
 
@@ -17,14 +20,18 @@ int main()
 	int *otherArray = malloc(10 * sizeof(int));
 	printf("Is the other array wrong? %d\n", mydispose(otherArray));
 
+	show_array(array);
+
 	int *pointer = mymalloc(array, 1);
 	*pointer = 5;
-	printf("My pointer points to: %p \n", pointer);
+	printf("My pointer points to: %p \n", (void *)pointer);
 	printf("My pointer points to: %d \n", *pointer);
 	//printf("My pointer points to: %d \n", mymalloc(array, 1));
-	printf("My array points to: %p \n", array);
+	printf("My array points to: %p \n", (void *)array);
 
 	show_array(array);
+
+	return 0;
 }
 
 void show_array(int *array)

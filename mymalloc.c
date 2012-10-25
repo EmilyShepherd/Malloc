@@ -44,6 +44,8 @@ int* mymalloc(int *array, int size)
 
 int myfree(int *array, int * block)
 {
+	//Always fail, until implemented
+	return 0;
 }
 
 int mydispose(int *array)
