@@ -92,7 +92,7 @@ int main()
 	//to us anyway, to avoid that byte being lost.
 	//The down side of this is that this byte won't be recovered
 	//until this block is freed, even if the next block is freed.
-	malloc_test(array, 5, 666);
+	//malloc_test(array, 5, 666);
 	
 	//I expect this to fail
 	malloc_test(array, 1, 777);

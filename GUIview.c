@@ -5,10 +5,10 @@ int inc_header(int *, int *);
 
 void gui_show_array(int *array)
 {
-    printf("Total memory space: %d\n\n", array[0]);
-    
     int curheader = 1;
     
+    printf("+------------------------------------+\n");
+    printf("| Total memory space: %d\n", array[0]);
     printf("+------------------------------------+\n");
     
     while (1)
