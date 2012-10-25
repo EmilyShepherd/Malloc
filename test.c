@@ -30,7 +30,7 @@ int free_test(int *array, int *block, int size)
     return myfree(array, block);
 }
 
-void show_array(int *array)
+void show_array()
 {
 	for (int i = 0; i < 100; i++)
 	{
@@ -76,17 +76,17 @@ int main()
   myfree(array, pointer);
   myfree(array, pointer2);
   
-  show_array(array);
+  show_array();
   
   printf("Is the array empty now? %d\n", mydispose(array));
   
   /*
-	show_array(array);
+	show_array();
 
 	printf("\nFREEING MEMORY\n");
 	printf("Free first pointer: %d\n\n", free_test(array, pointer, 1));
 
-	show_array(array);
+	show_array();
 
 	printf("\nASKING FOR NEW SPACE\n");
 	int *pointer3 = malloc_test(array, 1, 103);
@@ -98,7 +98,7 @@ int main()
 
 	int *pointer6 = malloc_test(array, 3, 106);
 	
-	show_array(array);
+	show_array();
 	
 	*/
 	
