@@ -39,8 +39,11 @@ int decode_header(int *header)
     
     while (1)
     {
-        value += (*head & 127) << (shift * 7);
+        //Shift the value up 7 bits and put the next 7 bits
+        //in after it.
+        value = (value << 7) + (*head & 0x7F); //0111 1111
         
+        //If the 8th bit is 1, there is another byte to follow
         if (*head >> 7 == 1)
         {
             shift++;
