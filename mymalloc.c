@@ -19,54 +19,54 @@ int inc_header(int *array, int *curheader)
 	}
 }
 
-int decode_header(int *header, int *value)
+int decode_header(int *header, int *size)
 {
-    unsigned char *head = (unsigned char *)header;
-    unsigned uvalue = 0;
+    unsigned char *byte = (unsigned char *)header;
+    unsigned usize = 0;
     int free = 0;
     
     //The 7th bit has in the first byte is the free flag,
     //so check that. If it's 1, set it to 0 so it doesn't
     //get used as part of the value by the code below.
-    if ((*head & 0x40) == 0x40)
+    if ((*byte & 0x40) == 0x40)
     {
         free   = 1;
-        *head &= 0xBF; //1011 1111
+        *byte &= 0xBF; //1011 1111
     }
     
     while (1)
     {
         //Shift the value up 7 bits and put the next 7 bits
         //in after it.
-        uvalue = (uvalue << 7) + (*head & 0x7F); //0111 1111
+        usize = (usize << 7) + (*byte & 0x7F); //0111 1111
         
         //If the 8th bit is 1, there is another byte to follow
-        if (*head >> 7 == 1)
+        if (*byte >> 7 == 1)
         {
-            head++;
+            byte++;
         }
         else
         {
-            *value = (signed int)uvalue;
+            *size = (signed int)usize;
             return free;
         }
     }
 }
 
-int encode_header(int *array, int free, int value)
+int encode_header(int *iarray, int free, int size)
 {
-    unsigned char *arr = (unsigned char *)array;
+    unsigned char *barray = (unsigned char *)iarray;
     int pos = 0;
-    unsigned int uvalue = (unsigned int)value;
+    unsigned int usize = (unsigned int)size;
     
     //Split the number into 5 bytes, each containing
     //7 bits of the value.
     unsigned char byte[5];
-    byte[0] = uvalue >> 28 & 0x0F;
-    byte[1] = uvalue >> 21 & 0x7F;
-    byte[2] = uvalue >> 14 & 0x7F;
-    byte[3] = uvalue >> 7  & 0x7F;
-    byte[4] = uvalue       & 0x7F;
+    byte[0] = usize >> 28 & 0x0F;
+    byte[1] = usize >> 21 & 0x7F;
+    byte[2] = usize >> 14 & 0x7F;
+    byte[3] = usize >> 7  & 0x7F;
+    byte[4] = usize       & 0x7F;
     
     //Loop through the bytes, looking for the first
     //one that's used - so we need not save the higher
@@ -88,11 +88,11 @@ int encode_header(int *array, int free, int value)
     
     for (int i = pos; i < 4; i++)
     {
-        *arr = byte[i] | 0x80; //1000 0000
-        arr++;
+        *barray = byte[i] | 0x80; //1000 0000
+        barray++;
     }
     
-    *arr = byte[4];
+    *barray = byte[4];
     
     return 5 - pos;
 }
