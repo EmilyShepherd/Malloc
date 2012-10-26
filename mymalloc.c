@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 int inc_header(int *array, int *curheader)
 {
 	if (array[*curheader] < 0)
@@ -74,6 +76,11 @@ int encode_header(int *array, int free, int value)
     if (free)
     {
         byte[pos] = byte[pos] | 0x40; //0100 0000
+    }
+    
+    for (int i = pos; i < 5; i++)
+    {
+        printf("%d\n", byte[i]);
     }
     
     return 0;

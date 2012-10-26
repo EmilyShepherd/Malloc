@@ -6,6 +6,7 @@ int* mymalloc(int *, int);
 int mydispose(int *);
 int myfree(int *, int *);
 int decode_header(int *);
+int encode_header(int *, int, int);
 void gui_show_array(int *);
 
 int *array;
@@ -92,6 +93,15 @@ void init(int size)
 int main()
 {
 	init(50);
+	
+	printf("\n");
+	encode_header(array, 0, 56);
+	printf("\n");
+	encode_header(array, 0, 64);
+	printf("\n");
+	encode_header(array, 1, 56);
+	printf("\n");
+	encode_header(array, 1, 64);
   
 	int *p1 = malloc_test(5);
 	int *p2 = malloc_test(8);
