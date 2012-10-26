@@ -41,6 +41,44 @@ int decode_header(int *header)
     }
 }
 
+int encode_header(int *array, int free, int value)
+{
+    //unsigned char *arr = (unsigned char *)array;
+    int pos = 0;
+    unsigned int uvalue = (unsigned int)value;
+    
+    //Split the number into 5 bytes, each containing
+    //7 bits of the value.
+    unsigned char byte[5];
+    byte[0] = uvalue >> 28 & 0x0F;
+    byte[1] = uvalue >> 21 & 0x7F;
+    byte[2] = uvalue >> 14 & 0x7F;
+    byte[3] = uvalue >> 7  & 0x7F;
+    byte[4] = uvalue       & 0x7F;
+    
+    //Loop through the bytes, looking for the first
+    //one that's used - so we need not save the higher
+    //unused bytes.
+    for (pos = 0; byte[pos] == 0; pos++);
+    
+    //Check if this byte uses its 7th bit. If it does
+    //we'll need to create a new byte, because we need
+    //the 7th bit of the first byte for the sign.
+    if ((byte[pos] & 0x40) == 0x40)
+    {
+        pos--;
+        
+        byte[pos] = 0x80; //1000 0000
+    }
+    
+    if (free)
+    {
+        byte[pos] = byte[pos] | 0x40; //0100 0000
+    }
+    
+    return 0;
+}
+
 int myinit(int *array, int size)
 {
 	if (size < 14) return 0;
