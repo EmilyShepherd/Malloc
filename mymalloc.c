@@ -19,6 +19,28 @@ int inc_header(int *array, int *curheader)
 	}
 }
 
+int decode_header(int *header)
+{
+    unsigned char *head = (unsigned char *)header;
+    int shift = 0;
+    unsigned int value = 0;
+    
+    while (1)
+    {
+        value += (*head & 127) << (shift * 7);
+        
+        if (*head >> 7 == 1)
+        {
+            shift++;
+            head++;
+        }
+        else
+        {
+            return (signed int)value;
+        }
+    }
+}
+
 int myinit(int *array, int size)
 {
 	if (size < 14) return 0;

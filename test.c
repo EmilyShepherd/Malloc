@@ -5,6 +5,7 @@ int myinit(int *, int);
 int* mymalloc(int *, int);
 int mydispose(int *);
 int myfree(int *, int *);
+int decode_header(int *);
 void gui_show_array(int *);
 
 int *array;
@@ -117,9 +118,9 @@ int main()
 	//malloc_test(5);
 	
 	//I expect this to fail
-	malloc_test(1);
+	//malloc_test(1);
 	
-	gui_show_array(array);
+	//gui_show_array(array);
 	
 	if (*p1 + *p2 + *p3 + *p4) {}
   
