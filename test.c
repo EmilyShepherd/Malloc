@@ -5,7 +5,7 @@ int myinit(int *, int);
 int* mymalloc(int *, int);
 int mydispose(int *);
 int myfree(int *, int *);
-int decode_header(int *);
+int decode_header(int *, int *);
 int encode_header(int *, int, int);
 void gui_show_array(int *);
 
@@ -94,15 +94,21 @@ int main()
 {
 	init(50);
 	
-	//printf("%d\n", encode_header(array, 0, 56));
+	printf("%d\n", encode_header(array, 0, 56));
 	printf("%d\n", encode_header(array + 1, 0, 564640));
-	//printf("%d\n", encode_header(array + 2, 1, 56));
-	//printf("%d\n\n", encode_header(array + 3, 1, 64));
+	printf("%d\n", encode_header(array + 2, 1, 56));
+	printf("%d\n\n", encode_header(array + 3, 1, 64));
 	
-	//printf("%d\n", decode_header(array));
-	printf("%d\n", decode_header(array + 1));
-	//printf("%d\n", decode_header(array + 2));
-	//printf("%d\n", decode_header(array + 3));
+	int value;
+	
+	printf("Free: %d  Size:", decode_header(array, &value));
+	printf("%d\n", value);
+	printf("Free: %d  Size:", decode_header(array + 1, &value));
+	printf("%d\n", value);
+	printf("Free: %d  Size:", decode_header(array + 2, &value));
+	printf("%d\n", value);
+	printf("Free: %d  Size:", decode_header(array + 3, &value));
+	printf("%d\n", value);
   
 	int *p1 = malloc_test(5);
 	int *p2 = malloc_test(8);

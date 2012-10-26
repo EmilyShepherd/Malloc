@@ -19,10 +19,10 @@ int inc_header(int *array, int *curheader)
 	}
 }
 
-int decode_header(int *header)
+int decode_header(int *header, int *value)
 {
     unsigned char *head = (unsigned char *)header;
-    unsigned int value = 0;
+    unsigned uvalue = 0;
     int free = 0;
     
     //The 7th bit has in the first byte is the free flag,
@@ -38,7 +38,7 @@ int decode_header(int *header)
     {
         //Shift the value up 7 bits and put the next 7 bits
         //in after it.
-        value = (value << 7) + (*head & 0x7F); //0111 1111
+        uvalue = (uvalue << 7) + (*head & 0x7F); //0111 1111
         
         //If the 8th bit is 1, there is another byte to follow
         if (*head >> 7 == 1)
@@ -47,7 +47,8 @@ int decode_header(int *header)
         }
         else
         {
-            return (signed int)value;
+            *value = (signed int)uvalue;
+            return free;
         }
     }
 }
