@@ -7,9 +7,9 @@ void gui_show_array(int *array)
 {
     int curheader = 1;
     
-    printf("+------------------------------------+\n");
+    printf("+-------------------------------------+\n");
     printf("| Total memory space: %d\n", array[0]);
-    printf("+------------------------------------+\n");
+    printf("+-------------------------------------+\n");
     
     while (1)
     {
@@ -30,15 +30,31 @@ void gui_show_array(int *array)
         {
             if (array[curheader] > 0)
             {
-                printf("| (%d)\n", array[i]);
+                if (array[i] == 0)
+                {
+                    printf("|\n");
+                }
+                else
+                {
+                    printf("|   Dead header (size: %d)\n", array[i]);
+                }
+            }
+            else if (array[i] == 999)
+            {
+                printf("|   Data\n");
+            }
+            else if (array[i] == 0)
+            {
+                printf("+ - - - - - - - - - - - - - - - - - - +\n");
+                printf("| Wasted int\n");
             }
             else
             {
-                printf("| %d\n", array[i]);
+                printf("|   Data (%d)\n", array[i]);
             }
         }
         
-        printf("+------------------------------------+\n");
+        printf("+-------------------------------------+\n");
 
         if (!inc_header(array, &curheader)) return;
     }

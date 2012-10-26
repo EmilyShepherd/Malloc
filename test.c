@@ -9,7 +9,7 @@ void gui_show_array(int *);
 
 int *array;
 
-int* malloc_test(int *array, int size, int id)
+int* malloc_test(int size)
 {
     int *newArray = mymalloc(array, size);
     
@@ -21,20 +21,37 @@ int* malloc_test(int *array, int size, int id)
     
     for (int i = 0; i < size; i++)
     {
-        newArray[i] = id;
+        newArray[i] = 999;
     }
     
     return newArray;
 }
 
-int free_test(int *array, int *block, int size)
+void free_test(int *block)
 {
+    int size;
+    block--;
+    
+    if (*block < 0)
+    {
+        size = -1 * *block;
+    }
+    else
+    {
+        size = *block;
+    }
+    
+    block++;
+    
     for (int i = 0; i < size; i++)
     {
         block[i] = 0;
     }
     
-    return myfree(array, block);
+    if (!myfree(array, block))
+    {
+        printf("!!! Couldn't free memory !!!");
+    }
 }
 
 void show_array()
@@ -75,16 +92,21 @@ int main()
 {
 	init(50);
   
-	int *p1 = malloc_test(array, 5, 101);
-	int *p2 = malloc_test(array, 8, 108);
-	int *p3 = malloc_test(array, 3, 103);
-	int *p4 = malloc_test(array, 10, 110);
+	int *p1 = malloc_test(5);
+	int *p2 = malloc_test(8);
+	int *p3 = malloc_test(3);
+	int *p4 = malloc_test(10);
 	
-	myfree(array, p2);
-	myfree(array, p3);
+	p1[0] = 44;
+	p2[0] = 33;
+	p3[0] = 22;
+	p4[0] = 11;
 	
-	p2 = malloc_test(array, 5, 105);
-	p3 = malloc_test(array, 18, 118);
+	free_test(p2);
+	free_test(p3);
+	
+	p2 = malloc_test(5);
+	p3 = malloc_test(17);
 	
 	//I expect this to fill the space of size 6. Because using
 	//this space leaves one int left over, which can't be used
@@ -92,10 +114,10 @@ int main()
 	//to us anyway, to avoid that byte being lost.
 	//The down side of this is that this byte won't be recovered
 	//until this block is freed, even if the next block is freed.
-	//malloc_test(array, 5, 666);
+	//malloc_test(5);
 	
 	//I expect this to fail
-	malloc_test(array, 1, 777);
+	malloc_test(1);
 	
 	gui_show_array(array);
 	
