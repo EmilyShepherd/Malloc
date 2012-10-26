@@ -98,6 +98,11 @@ int main()
 	printf("%d\n", encode_header(array + 1, 0, 64));
 	printf("%d\n", encode_header(array + 2, 1, 56));
 	printf("%d\n\n", encode_header(array + 3, 1, 64));
+	
+	printf("%d\n", decode_header(array));
+	printf("%d\n", decode_header(array + 1));
+	printf("%d\n", decode_header(array + 2));
+	printf("%d\n", decode_header(array + 3));
   
 	int *p1 = malloc_test(5);
 	int *p2 = malloc_test(8);
