@@ -26,6 +26,16 @@ int decode_header(int *header)
     unsigned char *head = (unsigned char *)header;
     int shift = 0;
     unsigned int value = 0;
+    int free = 0;
+    
+    //The 7th bit has in the first byte is the free flag,
+    //so check that. If it's 1, set it to 0 so it doesn't
+    //get used as part of the value by the code below.
+    if ((*head & 0x40) == 0x40)
+    {
+        free   = 1;
+        *head &= 0xBF; //1011 1111
+    }
     
     while (1)
     {
