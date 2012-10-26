@@ -94,20 +94,22 @@ int main()
 {
 	init(50);
 	
-	printf("%d\n", encode_header(array, 0, 56));
-	printf("%d\n", encode_header(array + 1, 0, 564640));
-	printf("%d\n", encode_header(array + 2, 1, 56));
-	printf("%d\n\n", encode_header(array + 3, 1, 64));
+	int *array2 = malloc(10 * sizeof(int));
+	
+	printf("%d\n", encode_header(array2, 0, 56));
+	printf("%d\n", encode_header(array2 + 1, 0, 564640));
+	printf("%d\n", encode_header(array2 + 2, 1, 56));
+	printf("%d\n\n", encode_header(array2 + 3, 1, 64));
 	
 	int value;
 	
-	printf("Free: %d  Size:", decode_header(array, &value));
+	printf("Free: %d  Size:", decode_header(array2, &value));
 	printf("%d\n", value);
-	printf("Free: %d  Size:", decode_header(array + 1, &value));
+	printf("Free: %d  Size:", decode_header(array2 + 1, &value));
 	printf("%d\n", value);
-	printf("Free: %d  Size:", decode_header(array + 2, &value));
+	printf("Free: %d  Size:", decode_header(array2 + 2, &value));
 	printf("%d\n", value);
-	printf("Free: %d  Size:", decode_header(array + 3, &value));
+	printf("Free: %d  Size:", decode_header(array2 + 3, &value));
 	printf("%d\n", value);
   
 	int *p1 = malloc_test(5);
@@ -137,7 +139,7 @@ int main()
 	//I expect this to fail
 	//malloc_test(1);
 	
-	//gui_show_array(array);
+	gui_show_array(array);
 	
 	if (*p1 + *p2 + *p3 + *p4) {}
   
