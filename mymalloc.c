@@ -1,3 +1,5 @@
+#include "mymalloc.h"
+
 /*
  * @depreciated
  */

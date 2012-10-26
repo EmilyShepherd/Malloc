@@ -1,13 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-int myinit(int *, int);
-int* mymalloc(int *, int);
-int mydispose(int *);
-int myfree(int *, int *);
-int decode_header(int *, int *);
-int encode_header(int *, int, int);
-void gui_show_array(int *);
+#include "mymalloc.h"
+#include "mymalloc.c"
+#include "GUIview.c"
 
 int *array;
 
