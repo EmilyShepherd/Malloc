@@ -134,6 +134,8 @@ int myinit(int *array, int size)
 int* mymalloc(int *array, int size)
 {
     int curheader = 1;
+    
+    if (size <= 0) return (int *)0;
 
     while (1)
     {
@@ -158,11 +160,8 @@ int* mymalloc(int *array, int size)
             return &array[curheader+1];
         }
 
-        if (!inc_header(array, &curheader)) return (int *) 0;
-    } 
-
-
-
+        if (!inc_header(array, &curheader)) return (int *)0;
+    }
 }
 
 int myfree(int *array, int *block)
