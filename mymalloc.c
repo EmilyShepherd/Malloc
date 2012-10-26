@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 int inc_header(int *array, int *curheader)
 {
 	if (array[*curheader] < 0)
@@ -24,7 +22,6 @@ int inc_header(int *array, int *curheader)
 int decode_header(int *header)
 {
     unsigned char *head = (unsigned char *)header;
-    int shift = 0;
     unsigned int value = 0;
     int free = 0;
     
@@ -46,7 +43,6 @@ int decode_header(int *header)
         //If the 8th bit is 1, there is another byte to follow
         if (*head >> 7 == 1)
         {
-            shift++;
             head++;
         }
         else
