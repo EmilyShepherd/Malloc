@@ -1,29 +1,36 @@
+/*
+ * @depreciated
+ */
 int inc_header(int *array, int *curheader)
 {
-	if (array[*curheader] < 0)
-	{
-		*curheader += -1*array[*curheader] + 1;
-	}
-	else
-	{
-		*curheader += array[*curheader] + 1;
-	}
+    if (array[*curheader] < 0)
+    {
+        *curheader += -1*array[*curheader] + 1;
+    }
+    else
+    {
+        *curheader += array[*curheader] + 1;
+    }
 
-	if (*curheader >= array[0])
-	{
-		return 0;
-	}
-	else
-	{
-		return 1;
-	}
+    if (*curheader >= array[0])
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
 }
 
+/*
+ * Reads a header, returning whether it is free or not, and setting the
+ * passed size to be the size of the header's block.
+ */
 int decode_header(int *header, int *size)
 {
     unsigned char *byte = (unsigned char *)header;
-    unsigned usize = 0;
-    int free = 0;
+    unsigned usize      = 0;
+    int free            = 0;
     
     //The 7th bit has in the first byte is the free flag,
     //so check that. If it's 1, set it to 0 so it doesn't
@@ -53,11 +60,15 @@ int decode_header(int *header, int *size)
     }
 }
 
+/*
+ * Encodes the given free flag and size into the the given array,
+ * returning how many bytes it used.
+ */
 int encode_header(int *iarray, int free, int size)
 {
     unsigned char *barray = (unsigned char *)iarray;
-    int pos = 0;
-    unsigned int usize = (unsigned int)size;
+    unsigned int usize    = (unsigned int)size;
+    int pos               = 0;
     
     //Split the number into 5 bytes, each containing
     //7 bits of the value.
@@ -106,43 +117,49 @@ int encode_header(int *iarray, int free, int size)
 
 int myinit(int *array, int size)
 {
-	if (size < 14) return 0;
+    //Reject the memory space if it's too small
+    //14 is a random number we picked - it could be smaller
+    if (size < 14) return 0;
+    
+    //Save the total size of the memory
+    array[0] = size;
+    
+    //Create the first header. Its size is the total space minus two
+    //(one for array[0] and one for this header - array[1])
+    array[1] = size - 2;
 
-	array[0] = size;
-
-	array[1] = size - 2;
-
-	return 1;
+    return 1;
 }
 
 int* mymalloc(int *array, int size)
 {
-	int curheader = 1;
+    int curheader = 1;
 
-	while (1)
-	{
-		// positive header int, implies free space of this size
-		if (array[curheader] >= size)
-		{
-			
-			if (size + 1 < array[curheader])
-			{
-				// Allocate space, then put header after data for new section of free data
-				array[curheader + size + 1] = array[curheader] - size - 1;
-				array[curheader] = -1*size;
+    while (1)
+    {
+        //Positive header int, implies free space of this size
+        if (array[curheader] >= size)
+        {
+            if (size + 1 < array[curheader])
+            {
+                //Allocate the space asked for, then put header after
+                //data for a new free block
+                array[curheader + size + 1] = array[curheader] - size - 1;
+                array[curheader] = -1*size;
+            } 
+            else
+            {
+                //There is not enough space to split this block so that
+                //a header and data can appear after this allocation.
+                //Allocate the whole block even though we don't need it.
+                array[curheader] *= -1;
+            }
 
-			} 
-			else
-			{
-				// No size for a new header, the entire array is being used
-				array[curheader] *= -1; 	
-			}
+            return &array[curheader+1];
+        }
 
-			return &array[curheader+1];
-		}
-
-		if (!inc_header(array, &curheader)) return (int *) 0;
-	} 
+        if (!inc_header(array, &curheader)) return (int *) 0;
+    } 
 
 
 
@@ -150,50 +167,55 @@ int* mymalloc(int *array, int size)
 
 int myfree(int *array, int *block)
 {
-	int curheader  = 1;
-	int lastheader = 0;
-	
-	while (1)
-	{
-		if (&array[curheader + 1] == block)
-		{
-			//This block exists, but it is not being used
-			//ignore this free request
-			if (array[curheader] > 0)
-			{
-				return 0;
-			}
+    int curheader  = 1;
+    int lastheader = 0;
 
-			//Mark it as free
-			array[curheader] *= -1;
+    while (1)
+    {
+        if (&array[curheader + 1] == block)
+        {
+            //This block exists, but it is not being used
+            //ignore this free request
+            if (array[curheader] > 0) return 0;
 
-			int nextheader = curheader + 1 + array[curheader];
+            //Mark it as free
+            array[curheader] *= -1;
 
-			//Next block is free - combine
-			if (nextheader < array[0] && array[nextheader] > 0)
-			{
-				array[curheader] += array[nextheader] + 1;
-			}
+            int nextheader = curheader + 1 + array[curheader];
 
-			//Last block is free - combine
-			if (lastheader != 0 && array[lastheader] > 0)
-			{
-				array[lastheader] += array[curheader] + 1;
-			}
+            //Next block is free - combine
+            if (nextheader < array[0] && array[nextheader] > 0)
+            {
+                array[curheader] += array[nextheader] + 1;
+            }
 
-			return 1;
-		}
+            //Last block is free - combine
+            if (lastheader != 0 && array[lastheader] > 0)
+            {
+                array[lastheader] += array[curheader] + 1;
+            }
 
-		//Save this header and move unto the next one
-		lastheader = curheader;
-		if (!inc_header(array, &curheader)) return 0;
-	}
+            return 1;
+        }
+
+        //Save this header and move unto the next one
+        lastheader = curheader;
+        if (!inc_header(array, &curheader)) return 0;
+    }
 }
 
+/*
+ * Returns one if the first header (array[1]) equals the total memory
+ * space (array[0]) minus two
+ */
 int mydispose(int *array)
 {
-
-	// Return one if free space pointer correctly pointers to the rest of the array
-	if (array[1] == array[0] - 2) return 1;
-	return 0; 
+    if (array[1] == array[0] - 2)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
