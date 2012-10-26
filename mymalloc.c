@@ -81,17 +81,24 @@ int encode_header(int *iarray, int free, int size)
         pos--;
     }
     
+    //If we want to mark this header's block as free, save
+    //1 into the 7th bit of the first byte
     if (free)
     {
         byte[pos] = byte[pos] | 0x40; //0100 0000
     }
     
+    //Save all except the last byte, with the MSB bit
+    //set to 1 to show there are more bytes to follow
     for (int i = pos; i < 4; i++)
     {
         *barray = byte[i] | 0x80; //1000 0000
         barray++;
     }
     
+    //Save the last byte
+    //The 8th bit must be 0, but we know it is, because of
+    //the 0x7F mask we used above.
     *barray = byte[4];
     
     return 5 - pos;
