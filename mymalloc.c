@@ -55,7 +55,7 @@ int decode_header(int *header)
 
 int encode_header(int *array, int free, int value)
 {
-    //unsigned char *arr = (unsigned char *)array;
+    unsigned char *arr = (unsigned char *)array;
     int pos = 0;
     unsigned int uvalue = (unsigned int)value;
     
@@ -79,8 +79,6 @@ int encode_header(int *array, int free, int value)
     if ((byte[pos] & 0x40) == 0x40)
     {
         pos--;
-        
-        byte[pos] = 0x80; //1000 0000
     }
     
     if (free)
@@ -88,12 +86,15 @@ int encode_header(int *array, int free, int value)
         byte[pos] = byte[pos] | 0x40; //0100 0000
     }
     
-    for (int i = pos; i < 5; i++)
+    for (int i = pos; i < 4; i++)
     {
-        printf("%d\n", byte[i]);
+        *arr = byte[i] | 0x80; //1000 0000
+        arr++;
     }
     
-    return 0;
+    *arr = byte[4];
+    
+    return 5 - pos;
 }
 
 int myinit(int *array, int size)
