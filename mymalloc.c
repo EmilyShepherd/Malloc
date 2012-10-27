@@ -26,13 +26,17 @@ int inc_header(int *array, int *curheader)
 
 /*
  * Reads a header, returning whether it is free or not, and setting the
- * passed size to be the size of the header's block.
+ * passed blocksize to be the size of the header's block.
+ *
+ * NB blocksize is the number of ints of the block's data
+ *    headersize is the number of bytes of the block's header.
  */
-int decode_header(int *header, int *size)
+int decode_header(int *header, int *blocksize, int *headersize)
 {
     unsigned char *byte = (unsigned char *)header;
     unsigned usize      = 0;
     int free            = 0;
+    int bytes           = 0;
     
     //The 7th bit has in the first byte is the free flag,
     //so check that. If it's 1, set it to 0 so it doesn't
@@ -49,6 +53,8 @@ int decode_header(int *header, int *size)
         //in after it.
         usize = (usize << 7) + (*byte & 0x7F); //0111 1111
         
+        bytes++;
+        
         //If the 8th bit is 1, there is another byte to follow
         if (*byte >> 7 == 1)
         {
@@ -56,7 +62,8 @@ int decode_header(int *header, int *size)
         }
         else
         {
-            *size = (signed int)usize;
+            *blocksize  = (signed int)usize;
+            *headersize = bytes;
             return free;
         }
     }

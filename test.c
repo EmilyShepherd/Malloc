@@ -96,16 +96,17 @@ int main()
 	printf("%d\n", encode_header(array2 + 2, 1, 56));
 	printf("%d\n\n", encode_header(array2 + 3, 1, 64));
 	
-	int value;
+	int blocksize;
+	int headersize;
 	
-	printf("Free: %d  Size:", decode_header(array2, &value));
-	printf("%d\n", value);
-	printf("Free: %d  Size:", decode_header(array2 + 1, &value));
-	printf("%d\n", value);
-	printf("Free: %d  Size:", decode_header(array2 + 2, &value));
-	printf("%d\n", value);
-	printf("Free: %d  Size:", decode_header(array2 + 3, &value));
-	printf("%d\n", value);
+	printf("Free: %d  Size:", decode_header(array2, &blocksize, &headersize));
+	printf("%d\n", blocksize);
+	printf("Free: %d  Size:", decode_header(array2 + 1, &blocksize, &headersize));
+	printf("%d\n", blocksize);
+	printf("Free: %d  Size:", decode_header(array2 + 2, &blocksize, &headersize));
+	printf("%d\n", blocksize);
+	printf("Free: %d  Size:", decode_header(array2 + 3, &blocksize, &headersize));
+	printf("%d\n", blocksize);
   
 	int *p1 = malloc_test(5);
 	int *p2 = malloc_test(8);
