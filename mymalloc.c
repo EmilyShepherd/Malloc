@@ -63,6 +63,14 @@ int decode_header(int *header, int *blocksize, int *headersize)
         {
             *blocksize  = (signed int)usize;
             *headersize = bytes;
+
+            // Reset bit to be free
+	     byte = (unsigned char *)header;
+            if (free)
+            {
+                *byte |= 0x40;
+            }
+
             return free;
         }
     }

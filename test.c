@@ -107,6 +107,15 @@ int main()
 	printf("%d\n", blocksize);
 	printf("Free: %d  Size:", decode_header(array2 + 3, &blocksize, &headersize));
 	printf("%d\n", blocksize);
+
+       printf("Free: %d  Size:", decode_header(array2, &blocksize, &headersize));
+	printf("%d\n", blocksize);
+	printf("Free: %d  Size:", decode_header(array2 + 1, &blocksize, &headersize));
+	printf("%d\n", blocksize);
+	printf("Free: %d  Size:", decode_header(array2 + 2, &blocksize, &headersize));
+	printf("%d\n", blocksize);
+	printf("Free: %d  Size:", decode_header(array2 + 3, &blocksize, &headersize));
+	printf("%d\n", blocksize);
   
 	int *p1 = malloc_test(5);
 	int *p2 = malloc_test(8);
