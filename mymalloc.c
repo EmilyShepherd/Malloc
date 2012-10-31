@@ -178,6 +178,9 @@ int* mymalloc(int *array, int size)
     if (size <= 0) return (int *)0;
 
     unsigned char* barray = (unsigned char *)array;
+    
+    //The end address of the memory space
+    unsigned char* end    = barray + array[0] * 4;
 
     while (1)
     {
@@ -207,7 +210,7 @@ int* mymalloc(int *array, int size)
 
         barray += 4 * blocksize;
 
-        if (barray >= (unsigned char *)array + array[0]*4)
+        if (barray >= end)
         {
             return (int*)0;
         }
