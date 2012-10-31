@@ -252,12 +252,15 @@ int myfree(int *array, int *block)
  */
 int mydispose(int *array)
 {
-    if (array[1] == array[0] - 2)
+    int blocksize;
+    int headersize;
+    if (decode_header(array + 1, &blocksize, &headersize))
     {
-        return 1;
+        if (blocksize == array[0] - 2)
+        {
+            return 1;
+        }
     }
-    else
-    {
-        return 0;
-    }
+
+    return 0;
 }
