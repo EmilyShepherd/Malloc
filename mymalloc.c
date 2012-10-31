@@ -1,5 +1,4 @@
 #include "mymalloc.h"
-#include <stdio.h>
 
 /*
  * @depreciated
@@ -144,8 +143,6 @@ int myinit(int *array, int size)
     
 
     int header2size = encode_header((int *)(barray + 4), 1, size - 2);
-
-printf("%d -> %d", size, header2size);
 
     barray  += 1;
 
