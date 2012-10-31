@@ -130,6 +130,36 @@ int encode_header(int *iarray, int free, int size)
     return 5 - pos;
 }
 
+char* blank_header(char *barray, int blocksize)
+{
+    int headersize = encode_header((int *) barray, 1, --blocksize);
+    char* sarray = barray;
+
+    if (headersize == 3)
+    {
+        barray += 4*blocksize - 2;
+        *barray = 64;
+    }
+    else if (headersize == 2)
+    {
+        barray += 4*blocksize - 3;
+        *barray = (char) 0xC0;
+        barray++;
+        *barray = 0;
+    }
+    else if (headersize == 1)
+    {
+        barray += 4*blocksize - 4;
+        *barray = (char) 192;
+        barray++;
+        *barray = 0;
+        barray++;
+        *barray = 0;
+    }
+
+    return sarray + headersize;
+}
+
 int myinit(int *array, int size)
 {
     //Reject the memory space if it's too small
@@ -141,66 +171,44 @@ int myinit(int *array, int size)
     //Save the total size of the memory
     *array = size;
     
-
-    int header2size = encode_header((int *)(barray + 4), 1, size - 2);
-
-    barray  += 1;
-
-    if (header2size == 3)
-    {
-        barray += 4*size - 2;
-        *barray = 64;
-    }
-    else if (header2size == 2)
-    {
-        barray += 4*size - 3;
-        *barray = (char) 0xC0;
-        barray++;
-        *barray = 0;
-    }
-    else if (header2size == 1)
-    {
-        barray += 4*size - 4;
-        *barray = (char) 192;
-        barray++;
-        *barray = 0;
-        barray++;
-        *barray = 0;
-    }
+    blank_header(barray + 4, size - 1);
 
     return 1;
 }
 
 int* mymalloc(int *array, int size)
-{
-    int curheader = 1;
-    
+{   
     if (size <= 0) return (int *)0;
+
+    char* barray = (char *) array;
+
+    int blocksize;
+    int headersize;
 
     while (1)
     {
         //Positive header int, implies free space of this size
-        if (array[curheader] >= size)
+        if (decode_header((int *) barray, &blocksize, &headersize))
         {
-            if (size + 1 < array[curheader])
+            if (blocksize == size)
             {
-                //Allocate the space asked for, then put header after
-                //data for a new free block
-                array[curheader + size + 1] = array[curheader] - size - 1;
-                array[curheader] = -1*size;
+                *barray |= (char) 0x40;
+
+                return (int *) (barray + headersize);
             } 
-            else
+            else if (blocksize > size)
             {
-                //There is not enough space to split this block so that
-                //a header and data can appear after this allocation.
-                //Allocate the whole block even though we don't need it.
-                array[curheader] *= -1;
+                int newheadersize = encode_header((int *) barray, 0, size);
+                barray += newheadersize;
+                
+                blank_header(barray, blocksize - size);
+
+                return (int *) barray;
             }
 
-            return &array[curheader+1];
         }
 
-        if (!inc_header(array, &curheader)) return (int *)0;
+        //if (!inc_header(array, &curheader)) return (int *)0;
     }
 }
 
@@ -239,7 +247,7 @@ int myfree(int *array, int *block)
 
         //Save this header and move unto the next one
         lastheader = curheader;
-        if (!inc_header(array, &curheader)) return 0;
+        //if (!inc_header(array, &curheader)) return 0;
     }
 }
 
