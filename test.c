@@ -53,10 +53,22 @@ void free_test(int *block)
 
 void show_array()
 {
-	for (int i = 0; i < 100; i++)
-	{
-		printf("%d: %d\n", i, array[i]);
-	}
+    unsigned char *barray = (unsigned char *)array;
+    int fours = 0;
+    int ints  = 0;
+    
+    for (int i = 0; i < 80; i++)
+    {
+        printf("%d\n", barray[i]);
+        
+        fours++;
+        if (fours == 4)
+        {
+            ints++;
+            fours = 0;
+            printf("%d ------------\n", ints);
+        }
+    }
 }
 
 void init(int size)
@@ -87,7 +99,9 @@ void init(int size)
 
 int main()
 {
-	init(50);
+	init(20);
+  
+  show_array();
   
 	return 0;
 }
