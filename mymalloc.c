@@ -198,8 +198,7 @@ int* mymalloc(int *array, int size)
             } 
             else if (blocksize > size)
             {
-                int newheadersize = encode_header((int *)barray, 0, size);
-                barray += newheadersize;
+                barray += encode_header((int *)barray, 0, size) + size * 4;
                 
                 create_free_block(barray, blocksize - size);
 
