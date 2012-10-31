@@ -195,7 +195,7 @@ int* mymalloc(int *array, int size)
         {
             if (blocksize == size)
             {
-                *barray |= 0x40;
+                *barray &= 0xBF; //1011 1111
 
                 return (int *)(barray + headersize);
             } 
