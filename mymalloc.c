@@ -130,31 +130,28 @@ int encode_header(int *iarray, int free, int size)
     return 5 - pos;
 }
 
-char* create_free_block(char *barray, int blocksize)
+unsigned char* create_free_block(unsigned char *barray, int blocksize)
 {
-    int headersize = encode_header((int *) barray, 1, blocksize - 1);
-    char* sarray = barray;
+    int headersize = encode_header((int *)barray, 1, blocksize - 1);
+    unsigned char* sarray = barray;
 
     if (headersize == 3)
     {
-        barray += 4*blocksize - 1;
-        *barray = 64;
+        barray   += 4*blocksize - 1;
+        barray[0] = 64;
     }
     else if (headersize == 2)
     {
-        barray += 4*blocksize - 2;
-        *barray = (char) 0xC0;
-        barray++;
-        *barray = 0;
+        barray   += 4*blocksize - 2;
+        barray[0] = 0xC0;
+        barray[1] = 0;
     }
     else if (headersize == 1)
     {
-        barray += 4*blocksize - 3;
-        *barray = (char) 192;
-        barray++;
-        *barray = 0;
-        barray++;
-        *barray = 0;
+        barray   += 4*blocksize - 3;
+        barray[0] = 0xC0;
+        barray[1] = 0;
+        barray[2] = 0;
     }
 
     return sarray + headersize;
@@ -166,7 +163,7 @@ int myinit(int *array, int size)
     //14 is a random number we picked - it could be smaller
     if (size < 14) return 0;
 
-    char* barray = (char *) array;
+    unsigned char* barray = (unsigned char *)array;
     
     //Save the total size of the memory
     *array = size;
@@ -180,7 +177,7 @@ int* mymalloc(int *array, int size)
 {   
     if (size <= 0) return (int *)0;
 
-    char* barray = (char *) array;
+    unsigned char* barray = (unsigned char *)array;
 
     int blocksize;
     int headersize;
@@ -208,11 +205,12 @@ int* mymalloc(int *array, int size)
 
         }
 
-        //if (!inc_header(array, &curheader)) return (int *)0;
-	barray += 4*blocksize;
+        barray += 4 * blocksize;
 
-        if (barray >= (char *) array + array[0]*4)  return (int*) 0;
-
+        if (barray >= (unsigned char *) array + array[0]*4)
+        {
+            return (int*)0;
+        }
     }
 }
 
