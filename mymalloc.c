@@ -130,7 +130,7 @@ int encode_header(int *iarray, int free, int size)
     return 5 - pos;
 }
 
-char* blank_header(char *barray, int blocksize)
+char* create_free_block(char *barray, int blocksize)
 {
     int headersize = encode_header((int *) barray, 1, --blocksize);
     char* sarray = barray;
@@ -171,7 +171,7 @@ int myinit(int *array, int size)
     //Save the total size of the memory
     *array = size;
     
-    blank_header(barray + 4, size - 1);
+    create_free_block(barray + 4, size - 1);
 
     return 1;
 }
@@ -201,7 +201,7 @@ int* mymalloc(int *array, int size)
                 int newheadersize = encode_header((int *) barray, 0, size);
                 barray += newheadersize;
                 
-                blank_header(barray, blocksize - size);
+                create_free_block(barray, blocksize - size);
 
                 return (int *) barray;
             }
