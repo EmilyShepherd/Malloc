@@ -179,35 +179,35 @@ int* mymalloc(int *array, int size)
 
     unsigned char* barray = (unsigned char *)array;
 
-    int blocksize;
-    int headersize;
-
     while (1)
     {
+        int blocksize;
+        int headersize;
+    
         //Positive header int, implies free space of this size
-        if (decode_header((int *) barray, &blocksize, &headersize))
+        if (decode_header((int *)barray, &blocksize, &headersize))
         {
             if (blocksize == size)
             {
-                *barray |= (char) 0x40;
+                *barray |= 0x40;
 
-                return (int *) (barray + headersize);
+                return (int *)(barray + headersize);
             } 
             else if (blocksize > size)
             {
-                int newheadersize = encode_header((int *) barray, 0, size);
+                int newheadersize = encode_header((int *)barray, 0, size);
                 barray += newheadersize;
                 
                 create_free_block(barray, blocksize - size);
 
-                return (int *) barray;
+                return (int *)barray;
             }
 
         }
 
         barray += 4 * blocksize;
 
-        if (barray >= (unsigned char *) array + array[0]*4)
+        if (barray >= (unsigned char *)array + array[0]*4)
         {
             return (int*)0;
         }
