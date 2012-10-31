@@ -209,6 +209,10 @@ int* mymalloc(int *array, int size)
         }
 
         //if (!inc_header(array, &curheader)) return (int *)0;
+	barray += 4*blocksize;
+
+        if (barray >= (char *) array + array[0]*4)  return (int*) 0;
+
     }
 }
 
