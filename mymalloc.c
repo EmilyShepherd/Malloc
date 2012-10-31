@@ -80,7 +80,7 @@ int decode_header(int *header, int *blocksize, int *headersize)
  * Encodes the given free flag and size into the the given array,
  * returning how many bytes it used.
  */
-int encode_header(int *iarray, int free, int size)
+int encode_header(char *iarray, int free, int size)
 {
     unsigned char *barray = (unsigned char *)iarray;
     unsigned int usize    = (unsigned int)size;
@@ -135,13 +135,37 @@ int myinit(int *array, int size)
     //Reject the memory space if it's too small
     //14 is a random number we picked - it could be smaller
     if (size < 14) return 0;
+
+    char* barray = (char *) array;
     
     //Save the total size of the memory
-    array[0] = size;
+    *array = size;
     
-    //Create the first header. Its size is the total space minus two
-    //(one for array[0] and one for this header - array[1])
-    array[1] = size - 2;
+
+    int header2size = encode_header(barray + 4, 1, size - 2);
+    barray  += 1;
+
+    if (header2size == 3)
+    {
+        barray += 4*size - 1;
+        *barray = 64;
+    }
+    else if (header2size == 2)
+    {
+        barray += 4*size - 2;
+        *barray = (char) 0xC0;
+        barray++;
+        *barray = 0;
+    }
+    else if (header2size == 1)
+    {
+        barray += 4*size - 3;
+        *barray = (char) 192;
+        barray++;
+        *barray = 0;
+        barray++;
+        *barray = 0;
+    }
 
     return 1;
 }

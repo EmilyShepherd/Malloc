@@ -88,65 +88,6 @@ void init(int size)
 int main()
 {
 	init(50);
-	
-	int *array2 = malloc(10 * sizeof(int));
-	
-	printf("%d\n", encode_header(array2, 0, 56));
-	printf("%d\n", encode_header(array2 + 1, 0, 564640));
-	printf("%d\n", encode_header(array2 + 2, 1, 56));
-	printf("%d\n\n", encode_header(array2 + 3, 1, 64));
-	
-	int blocksize;
-	int headersize;
-	
-	printf("Free: %d  Size:", decode_header(array2, &blocksize, &headersize));
-	printf("%d\n", blocksize);
-	printf("Free: %d  Size:", decode_header(array2 + 1, &blocksize, &headersize));
-	printf("%d\n", blocksize);
-	printf("Free: %d  Size:", decode_header(array2 + 2, &blocksize, &headersize));
-	printf("%d\n", blocksize);
-	printf("Free: %d  Size:", decode_header(array2 + 3, &blocksize, &headersize));
-	printf("%d\n", blocksize);
-
-       printf("Free: %d  Size:", decode_header(array2, &blocksize, &headersize));
-	printf("%d\n", blocksize);
-	printf("Free: %d  Size:", decode_header(array2 + 1, &blocksize, &headersize));
-	printf("%d\n", blocksize);
-	printf("Free: %d  Size:", decode_header(array2 + 2, &blocksize, &headersize));
-	printf("%d\n", blocksize);
-	printf("Free: %d  Size:", decode_header(array2 + 3, &blocksize, &headersize));
-	printf("%d\n", blocksize);
-  
-	int *p1 = malloc_test(5);
-	int *p2 = malloc_test(8);
-	int *p3 = malloc_test(3);
-	int *p4 = malloc_test(10);
-	
-	p1[0] = 44;
-	p2[0] = 33;
-	p3[0] = 22;
-	p4[0] = 11;
-	
-	free_test(p2);
-	free_test(p3);
-	
-	p2 = malloc_test(5);
-	p3 = malloc_test(17);
-	
-	//I expect this to fill the space of size 6. Because using
-	//this space leaves one int left over, which can't be used
-	//for a header and data. mymalloc() should assign 6  bytes
-	//to us anyway, to avoid that byte being lost.
-	//The down side of this is that this byte won't be recovered
-	//until this block is freed, even if the next block is freed.
-	//malloc_test(5);
-	
-	//I expect this to fail
-	//malloc_test(1);
-	
-	gui_show_array(array);
-	
-	if (*p1 + *p2 + *p3 + *p4) {}
   
 	return 0;
 }
