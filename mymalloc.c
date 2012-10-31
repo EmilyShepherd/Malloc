@@ -132,24 +132,24 @@ int encode_header(int *iarray, int free, int size)
 
 char* create_free_block(char *barray, int blocksize)
 {
-    int headersize = encode_header((int *) barray, 1, --blocksize);
+    int headersize = encode_header((int *) barray, 1, blocksize - 1);
     char* sarray = barray;
 
     if (headersize == 3)
     {
-        barray += 4*blocksize - 2;
+        barray += 4*blocksize - 1;
         *barray = 64;
     }
     else if (headersize == 2)
     {
-        barray += 4*blocksize - 3;
+        barray += 4*blocksize - 2;
         *barray = (char) 0xC0;
         barray++;
         *barray = 0;
     }
     else if (headersize == 1)
     {
-        barray += 4*blocksize - 4;
+        barray += 4*blocksize - 3;
         *barray = (char) 192;
         barray++;
         *barray = 0;
