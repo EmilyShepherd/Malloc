@@ -181,6 +181,9 @@ int* mymalloc(int *array, int size)
     
     //The end address of the memory space
     unsigned char* end    = barray + array[0] * 4;
+    
+    //Move into the start header of the memory space
+    barray += 4;
 
     while (1)
     {
@@ -198,13 +201,12 @@ int* mymalloc(int *array, int size)
             } 
             else if (blocksize > size)
             {
-                barray += encode_header((int *)barray, 0, size) + size * 4;
+                barray += encode_header((int *)barray, 0, size);
                 
-                create_free_block(barray, blocksize - size);
+                create_free_block(barray + size * 4, blocksize - size);
 
                 return (int *)barray;
             }
-
         }
 
         barray += 4 * blocksize;

@@ -101,6 +101,8 @@ int main()
 {
 	init(20);
   
+  malloc_test(2);
+  
   show_array();
   
 	return 0;
