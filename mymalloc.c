@@ -1,5 +1,7 @@
 #include "mymalloc.h"
 
+typedef unsigned char ubyte;
+
 /*
  * @depreciated
  */
@@ -33,10 +35,10 @@ int inc_header(int *array, int *curheader)
  */
 int decode_header(int *header, int *blocksize, int *headersize)
 {
-    unsigned char *byte = (unsigned char *)header;
-    unsigned usize      = 0;
-    int free            = 0;
-    int bytes           = 0;
+    ubyte* byte    = (ubyte *)header;
+    unsigned usize = 0;
+    int free       = 0;
+    int bytes      = 0;
     
     //The 7th bit has in the first byte is the free flag, so check that.
     //If it's 1, set it to 0 so it doesn't get used as part of the value
@@ -65,7 +67,7 @@ int decode_header(int *header, int *blocksize, int *headersize)
             *headersize = bytes;
 
             // Reset bit to be free
-	     byte = (unsigned char *)header;
+            byte = (ubyte *)header;
             if (free)
             {
                 *byte |= 0x40;
@@ -82,13 +84,13 @@ int decode_header(int *header, int *blocksize, int *headersize)
  */
 int encode_header(int *iarray, int free, int size)
 {
-    unsigned char *barray = (unsigned char *)iarray;
+    ubyte* barray = (ubyte *)iarray;
     unsigned int usize    = (unsigned int)size;
     int pos               = 0;
     
     //Split the number into 5 bytes, each containing 7 bits of the
     //value.
-    unsigned char byte[5];
+    ubyte byte[5];
     byte[0] = usize >> 28 & 0x0F;
     byte[1] = usize >> 21 & 0x7F;
     byte[2] = usize >> 14 & 0x7F;
@@ -130,10 +132,10 @@ int encode_header(int *iarray, int free, int size)
     return 5 - pos;
 }
 
-unsigned char* create_free_block(unsigned char *barray, int blocksize)
+unsigned char* create_free_block(ubyte *barray, int blocksize)
 {
     int headersize = encode_header((int *)barray, 1, blocksize - 1);
-    unsigned char* sarray = barray;
+    ubyte* sarray  = barray;
 
     if (headersize == 3)
     {
@@ -163,7 +165,7 @@ int myinit(int *array, int size)
     //14 is a random number we picked - it could be smaller
     if (size < 14) return 0;
 
-    unsigned char* barray = (unsigned char *)array;
+    ubyte* barray = (ubyte *)array;
     
     //Save the total size of the memory
     *array = size;
@@ -177,10 +179,10 @@ int* mymalloc(int *array, int size)
 {   
     if (size <= 0) return (int *)0;
 
-    unsigned char* barray = (unsigned char *)array;
+    ubyte* barray = (ubyte *)array;
     
     //The end address of the memory space
-    unsigned char* end    = barray + array[0] * 4;
+    ubyte* end    = barray + array[0] * 4;
     
     //Move into the start header of the memory space
     barray += 4;
@@ -220,13 +222,13 @@ int* mymalloc(int *array, int size)
 
 int myfree(int *array, int *block)
 {
-    unsigned char *curheader  = (unsigned char *)array + 4;
-    unsigned char *lastheader = (unsigned char *)0;
-    int             firstsize  = 0;
-    unsigned char *bblock     = (unsigned char *)block;
+    ubyte *curheader  = (unsigned char *)array + 4;
+    ubyte *lastheader = (unsigned char *)0;
+    int    firstsize  = 0;
+    ubyte *bblock     = (unsigned char *)block;
     
     //The end address of the memory space
-    unsigned char* end        = curheader + array[0] * 4 - 4;
+    ubyte* end        = curheader + array[0] * 4 - 4;
     
     //The passed pointer is outside the valid bounds of an int
     //pointer so we can immediately fail
@@ -246,7 +248,7 @@ int myfree(int *array, int *block)
 
             //We have a free block(s) above us, we will define one big
             //free block encompassing all of it
-            if (0 && lastheader != (unsigned char *)0)
+            if (0 && lastheader != (ubyte *)0)
             {
                 create_free_block(lastheader, firstsize);
             }
@@ -259,14 +261,14 @@ int myfree(int *array, int *block)
         }
 
         //If this is the start of a free block of headers, save it
-        if (free && lastheader == (unsigned char *)0)
+        if (free && lastheader == (ubyte *)0)
         {
             lastheader = curheader;
             firstsize  = blocksize;
         }
         else
         {
-            lastheader = (unsigned char *)0;
+            lastheader = (ubyte *)0;
         }
         
         curheader += headersize + 4 * blocksize;
