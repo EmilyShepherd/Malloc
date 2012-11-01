@@ -220,40 +220,62 @@ int* mymalloc(int *array, int size)
 
 int myfree(int *array, int *block)
 {
-    int curheader  = 1;
-    int lastheader = 0;
+    unsigned char *curheader  = (unsigned char *)array + 4;
+    unsigned char *lastheader = (unsigned char *)0;
+    int             firstsize  = 0;
+    unsigned char *bblock     = (unsigned char *)block;
+    
+    //The end address of the memory space
+    unsigned char* end        = curheader + array[0] * 4 - 4;
+    
+    //The passed pointer is outside the valid bounds of an int
+    //pointer so we can immediately fail
+    if (bblock <= curheader || bblock >= end) return 0;
 
     while (1)
     {
-        if (&array[curheader + 1] == block)
+        int blocksize;
+        int headersize;
+        int free = decode_header((int *)curheader, &blocksize, &headersize);
+        
+        if (curheader + headersize == bblock)
         {
             //This block exists, but it is not being used
             //ignore this free request
-            if (array[curheader] > 0) return 0;
+            if (free) return 0;
 
-            //Mark it as free
-            array[curheader] *= -1;
-
-            int nextheader = curheader + 1 + array[curheader];
-
-            //Next block is free - combine
-            if (nextheader < array[0] && array[nextheader] > 0)
+            //We have a free block(s) above us, we will define one big
+            //free block encompassing all of it
+            if (0 && lastheader != (unsigned char *)0)
             {
-                array[curheader] += array[nextheader] + 1;
+                create_free_block(lastheader, firstsize);
             }
-
-            //Last block is free - combine
-            if (lastheader != 0 && array[lastheader] > 0)
+            else
             {
-                array[lastheader] += array[curheader] + 1;
+                create_free_block(curheader, blocksize);
             }
 
             return 1;
         }
 
-        //Save this header and move unto the next one
-        lastheader = curheader;
-        //if (!inc_header(array, &curheader)) return 0;
+        //If this is the start of a free block of headers, save it
+        if (free && lastheader == (unsigned char *)0)
+        {
+            lastheader = curheader;
+            firstsize  = blocksize;
+        }
+        else
+        {
+            lastheader = (unsigned char *)0;
+        }
+        
+        curheader += headersize + 4 * blocksize;
+        
+        //We've missed the block, fail
+        //Equals is a valid comparrison here, because if bblock were
+        //equal, that would mean it is pointing at a header, not the
+        //start of the block so it's invalid
+        if (curheader >= bblock) return 0;
     }
 }
 
@@ -265,6 +287,7 @@ int mydispose(int *array)
 {
     int blocksize;
     int headersize;
+    
     if (decode_header(array + 1, &blocksize, &headersize))
     {
         if (blocksize == array[0] - 2)
