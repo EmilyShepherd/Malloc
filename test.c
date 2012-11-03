@@ -57,7 +57,7 @@ void show_array()
     int fours = 0;
     int ints  = 0;
     
-    for (int i = 0; i < 80; i++)
+    for (int i = 0; i < 60; i++)
     {
         printf("%d\n", barray[i]);
         
@@ -99,11 +99,18 @@ void init(int size)
 
 int main()
 {
-	init(20);
+	init(15);
+	
+	show_array();
+
+	malloc_test(1);
+	malloc_test(1);
+
+	show_array();
   
-  malloc_test(2);
+  	//printf("TEST: %d\n\n", myfree(array, ptr));
   
-  show_array();
+  	//show_array();
   
 	return 0;
 }

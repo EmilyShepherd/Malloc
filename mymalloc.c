@@ -1,4 +1,5 @@
 #include "mymalloc.h"
+#include <stdio.h>
 
 typedef unsigned char ubyte;
 
@@ -132,8 +133,15 @@ int encode_header(int *iarray, int free, int size)
     return 5 - pos;
 }
 
-unsigned char* create_free_block(ubyte *barray, int blocksize)
+unsigned char* create_free_block(ubyte *barray, int blocksize, ubyte *nextheader)
 {
+    //Pass next header?
+    //Check if next block(s) is free
+    while (1)
+    {
+        break;
+    }
+
     int headersize = encode_header((int *)barray, 1, blocksize - 1);
     ubyte* sarray  = barray;
 
@@ -170,7 +178,7 @@ int myinit(int *array, int size)
     //Save the total size of the memory
     *array = size;
     
-    create_free_block(barray + 4, size - 1);
+    create_free_block(barray + 4, size - 1, (ubyte *)0);
 
     return 1;
 }
@@ -205,13 +213,13 @@ int* mymalloc(int *array, int size)
             {
                 barray += encode_header((int *)barray, 0, size);
                 
-                create_free_block(barray + size * 4, blocksize - size);
+                create_free_block(barray + size * 4, blocksize - size, (ubyte *)0);
 
                 return (int *)barray;
             }
         }
 
-        barray += 4 * blocksize;
+        barray += headersize + 4 * blocksize;
 
         if (barray >= end)
         {
@@ -250,11 +258,11 @@ int myfree(int *array, int *block)
             //free block encompassing all of it
             if (0 && lastheader != (ubyte *)0)
             {
-                create_free_block(lastheader, firstsize);
+                create_free_block(lastheader, firstsize, (ubyte *)0);
             }
             else
             {
-                create_free_block(curheader, blocksize);
+                create_free_block(curheader, blocksize, (ubyte *)0);
             }
 
             return 1;
