@@ -161,10 +161,13 @@ int header_size(int headerval)
     }
 }
 
-unsigned char* create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
+void create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
 {
     ubyte *nextheader  = endspace + 1;
     int blocksizebytes = endspace - barray + 1;
+
+printf("Start: %p\n", barray);
+printf("End: %p\n", endspace);
     
     //Pass next header?
     //Check if next block(s) is free
@@ -190,8 +193,9 @@ unsigned char* create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
     int blocksize      = blocksizebytes / 4;
     int extrabytes     = blocksizebytes - blocksize * 4;
 
+printf("bytes: %d", extrabytes);
+
     int headersize = header_size(blocksize);
-    ubyte* sarray  = barray;
 
     if (extrabytes==0 && headersize==sizeof(int)+1)
     {
@@ -204,10 +208,18 @@ unsigned char* create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
         extrabytes+= sizeof(int);
     }
 
-    encode_header((int *)barray, 1, blocksize);
+    if (blocksize != 0)
+    {
+        encode_header((int *)barray, 1, blocksize);
 
-    extrabytes-=headersize;
-    ubyte* endofblock = barray+headersize+(4*blocksize);
+        extrabytes -= headersize;
+    }
+    else
+    {
+        headersize = 0;
+    }
+
+    ubyte* endofblock = barray + headersize + (4*blocksize);
 
     if (extrabytes == 1)
     {
@@ -222,8 +234,6 @@ unsigned char* create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
         }
         endofblock[extrabytes - 1]=0;
     }
-
-    return sarray + headersize;
 }
 
 int myinit(int *array, int size)
@@ -270,12 +280,8 @@ int* mymalloc(int *array, int size)
             } 
             else if (blocksize > size)
             {
-                ubyte *nextheader = barray + headersize + 4 * blocksize;
-                if (nextheader >= end)
-                {
-                    nextheader = (ubyte *)0;
-                }
-                
+		ubyte *nextheader = barray + headersize + 4 * blocksize;
+
                 barray += encode_header((int *)barray, 0, size);
                 
                 create_free_block(barray + size * 4, nextheader - 1, end);

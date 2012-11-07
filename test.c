@@ -99,6 +99,8 @@ int main()
 	
 	free_test(p, 2);
 
+	malloc_test(1);
+
 	show_array();
 
 	if (*p) {}
