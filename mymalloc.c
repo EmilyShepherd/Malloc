@@ -165,9 +165,6 @@ void create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
 {
     ubyte *nextheader  = endspace + 1;
     int blocksizebytes = endspace - barray + 1;
-
-printf("Start: %p\n", barray);
-printf("End: %p\n", endspace);
     
     //Pass next header?
     //Check if next block(s) is free
@@ -192,8 +189,6 @@ printf("End: %p\n", endspace);
     
     int blocksize      = blocksizebytes / 4;
     int extrabytes     = blocksizebytes - blocksize * 4;
-
-printf("bytes: %d", extrabytes);
 
     int headersize = header_size(blocksize);
 
