@@ -138,11 +138,12 @@ int header_size(int headerval)
     int i;
     unsigned int uval = (unsigned int)headerval;
     ubyte byte;
-    
-    for (i = sizeof(int) + 1; i >= 0; i--)
+    ubyte mask = 0x0F;
+     
+    for (i = sizeof(int); i >= 0; i--)
     {
-        byte = (uval >> (7 * i)) & 0x7F;
-printf("%d", byte);
+        byte = (uval >> (7 * i)) & mask;
+        mask = 0x7F;
         
         if (byte != 0)
         {
@@ -152,11 +153,11 @@ printf("%d", byte);
     
     if ((byte & 0x40) == 0x40)
     {
-        return i + 1;
+        return i + 2;
     }
     else
     {
-        return i;
+        return i + 1;
     }
 }
 

@@ -89,21 +89,16 @@ void init(int size)
 
 int main()
 {
-	init(15);
+	//init(15);
 	
+printf("Header size 4 10: %d\n", header_size(10));
 	printf("Header size 4 63: %d\n", header_size(63));
 	printf("Header size 4 64: %d\n", header_size(64));
-
-	int *p1 = malloc_test(1);
-	int *p2 = malloc_test(2);
-	
-	show_array();
-	
-	free_test(p1, 1);
-
-	show_array();
-  
-  if (*p1 + *p2) {}
+printf("Header size 4 70: %d\n", header_size(70));
+printf("Header size 4 2000: %d\n", header_size(2000));
+printf("Header size 4 8000: %d\n", header_size(8000));
+printf("Header size 4 8191: %d\n", header_size(8191));
+printf("Header size 4 8192: %d\n", header_size(8192));
   
 	return 0;
 }
