@@ -137,9 +137,31 @@ unsigned char* create_free_block(ubyte *barray, int blocksize, ubyte *nextheader
 {
     //Pass next header?
     //Check if next block(s) is free
-    while (1)
+    if (nextheader != (ubyte *)0)
     {
-        break;
+        int extrabytes = 0;
+        
+        while (1)
+        {
+            int nextheadersize;
+            int nextblocksize;
+            
+            if (decode_header((int *)nextheader, &nextblocksize, &nextheadersize))
+            {
+                blocksize  += nextblocksize;
+                extrabytes += nextheadersize;
+                
+                if (extrabytes >= 4)
+                {
+                    extrabytes -= 4;
+                    blocksize++;
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
     }
 
     int headersize = encode_header((int *)barray, 1, blocksize - 1);
