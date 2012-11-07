@@ -18,28 +18,14 @@ int* malloc_test(int size)
     
     for (int i = 0; i < size; i++)
     {
-        newArray[i] = 999;
+        newArray[i] = 0x63636363;
     }
     
     return newArray;
 }
 
-void free_test(int *block)
-{
-    int size;
-    block--;
-    
-    if (*block < 0)
-    {
-        size = -1 * *block;
-    }
-    else
-    {
-        size = *block;
-    }
-    
-    block++;
-    
+void free_test(int *block, int size)
+{    
     for (int i = 0; i < size; i++)
     {
         block[i] = 0;
@@ -101,10 +87,15 @@ int main()
 {
 	init(15);
 	
-	show_array();
+	
 
-	malloc_test(1);
-	malloc_test(1);
+	int *p1 = malloc_test(1);
+	
+	printf("P1: %p\n", (void *)p1);
+	
+	show_array();
+	
+	free_test(p1, 1);
 
 	show_array();
   
