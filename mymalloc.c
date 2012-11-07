@@ -133,37 +133,49 @@ int encode_header(int *iarray, int free, int size)
     return 5 - pos;
 }
 
-unsigned char* create_free_block(ubyte *barray, int blocksize, ubyte *nextheader, ubyte* end)
+int header_size(int headerval)
 {
+    int i;
+    unsigned int uval = (unsigned int)headerval;
+    ubyte byte;
+    
+    for (i = sizeof(int) + 1; i >= 0; i--)
+    {
+        byte = (uval >> (7 * i)) & 0x7F;
+printf("%d", byte);
+        
+        if (byte != 0)
+        {
+            break;
+        }
+    }
+    
+    if ((byte & 0x40) == 0x40)
+    {
+        return i + 1;
+    }
+    else
+    {
+        return i;
+    }
+}
+
+unsigned char* create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
+{
+    ubyte *nextheader  = endspace + 1;
+    
     //Pass next header?
     //Check if next block(s) is free
     if (nextheader != (ubyte *)0)
     {
-        int extrabytes = 0;
-        
-        while (1)
+        while (nextheader < end)
         {
             int nextheadersize;
             int nextblocksize;
             
-            printf("Looking at: %p\n", nextheader);
-            
             if (decode_header((int *)nextheader, &nextblocksize, &nextheadersize))
             {
-                blocksize  += nextblocksize;
-                extrabytes += nextheadersize;
-                
-                if (extrabytes >= 4)
-                {
-                    extrabytes -= 4;
-                    blocksize++;
-                }
-                
                 nextheader += 4 * nextblocksize + nextheadersize;
-                if (nextheader >= end)
-                {
-                    break;
-                }
             }
             else
             {
@@ -171,6 +183,10 @@ unsigned char* create_free_block(ubyte *barray, int blocksize, ubyte *nextheader
             }
         }
     }
+    
+    int blocksizebytes = nextheader - 1 - barray;
+    int blocksize      = blocksizebytes / 4;
+    //int extrabytes     = blocksizebytes - blocksize * 4;
 
     int headersize = encode_header((int *)barray, 1, blocksize - 1);
     ubyte* sarray  = barray;
@@ -208,7 +224,7 @@ int myinit(int *array, int size)
     //Save the total size of the memory
     *array = size;
     
-    create_free_block(barray + 4, size - 1, (ubyte *)0, (ubyte *)0);
+    create_free_block(barray + 4, barray + array[0] * 4, barray + array[0] * 4);
 
     return 1;
 }
@@ -249,7 +265,7 @@ int* mymalloc(int *array, int size)
                 
                 barray += encode_header((int *)barray, 0, size);
                 
-                create_free_block(barray + size * 4, blocksize - size, nextheader, end);
+                create_free_block(barray + size * 4, nextheader - 1, end);
 
                 return (int *)barray;
             }
@@ -268,7 +284,7 @@ int myfree(int *array, int *block)
 {
     ubyte *curheader  = (unsigned char *)array + 4;
     ubyte *lastheader = (unsigned char *)0;
-    int    firstsize  = 0;
+    //int    firstsize  = 0;
     ubyte *bblock     = (unsigned char *)block;
     
     //The end address of the memory space
@@ -300,11 +316,11 @@ int myfree(int *array, int *block)
             //free block encompassing all of it
             if (0 && lastheader != (ubyte *)0)
             {
-                create_free_block(lastheader, firstsize, (ubyte *)0, (ubyte *)0);
+                //create_free_block(lastheader, firstsize, (ubyte *)0);
             }
             else
             {
-                create_free_block(curheader, blocksize, nextheader, end);
+                create_free_block(curheader, nextheader - 1, end);
             }
 
             return 1;
@@ -314,7 +330,7 @@ int myfree(int *array, int *block)
         if (free && lastheader == (ubyte *)0)
         {
             lastheader = curheader;
-            firstsize  = blocksize;
+            //firstsize  = blocksize;
         }
         else
         {

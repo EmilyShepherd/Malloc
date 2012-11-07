@@ -4,6 +4,8 @@
 #include "mymalloc.c"
 #include "GUIview.c"
 
+int header_size(int);
+
 int *array;
 
 int* malloc_test(int size)
@@ -42,6 +44,8 @@ void show_array()
     unsigned char *barray = (unsigned char *)array;
     int fours = 0;
     int ints  = 0;
+    
+    printf("\n\nArray Dump:\n\n");
     
     for (int i = 0; i < 60; i++)
     {
@@ -87,11 +91,11 @@ int main()
 {
 	init(15);
 	
-	
+	printf("Header size 4 63: %d\n", header_size(63));
+	printf("Header size 4 64: %d\n", header_size(64));
 
 	int *p1 = malloc_test(1);
-	
-	printf("P1: %p\n", (void *)p1);
+	int *p2 = malloc_test(2);
 	
 	show_array();
 	
@@ -99,9 +103,7 @@ int main()
 
 	show_array();
   
-  	//printf("TEST: %d\n\n", myfree(array, ptr));
-  
-  	//show_array();
+  if (*p1 + *p2) {}
   
 	return 0;
 }
