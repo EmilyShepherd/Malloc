@@ -133,7 +133,7 @@ int encode_header(int *iarray, int free, int size)
     return 5 - pos;
 }
 
-unsigned char* create_free_block(ubyte *barray, int blocksize, ubyte *nextheader)
+unsigned char* create_free_block(ubyte *barray, int blocksize, ubyte *nextheader, ubyte* end)
 {
     //Pass next header?
     //Check if next block(s) is free
@@ -146,6 +146,8 @@ unsigned char* create_free_block(ubyte *barray, int blocksize, ubyte *nextheader
             int nextheadersize;
             int nextblocksize;
             
+            printf("Looking at: %p\n", nextheader);
+            
             if (decode_header((int *)nextheader, &nextblocksize, &nextheadersize))
             {
                 blocksize  += nextblocksize;
@@ -155,6 +157,12 @@ unsigned char* create_free_block(ubyte *barray, int blocksize, ubyte *nextheader
                 {
                     extrabytes -= 4;
                     blocksize++;
+                }
+                
+                nextheader += 4 * nextblocksize + nextheadersize;
+                if (nextheader >= end)
+                {
+                    break;
                 }
             }
             else
@@ -200,7 +208,7 @@ int myinit(int *array, int size)
     //Save the total size of the memory
     *array = size;
     
-    create_free_block(barray + 4, size - 1, (ubyte *)0);
+    create_free_block(barray + 4, size - 1, (ubyte *)0, (ubyte *)0);
 
     return 1;
 }
@@ -233,9 +241,15 @@ int* mymalloc(int *array, int size)
             } 
             else if (blocksize > size)
             {
+                ubyte *nextheader = barray + headersize + 4 * blocksize;
+                if (nextheader >= end)
+                {
+                    nextheader = (ubyte *)0;
+                }
+                
                 barray += encode_header((int *)barray, 0, size);
                 
-                create_free_block(barray + size * 4, blocksize - size, (ubyte *)0);
+                create_free_block(barray + size * 4, blocksize - size, nextheader, end);
 
                 return (int *)barray;
             }
@@ -275,16 +289,22 @@ int myfree(int *array, int *block)
             //This block exists, but it is not being used
             //ignore this free request
             if (free) return 0;
+            
+            ubyte *nextheader = curheader + headersize + 4 * blocksize;
+            if (nextheader >= end)
+            {
+                nextheader = (ubyte *)0;
+            }
 
             //We have a free block(s) above us, we will define one big
             //free block encompassing all of it
             if (0 && lastheader != (ubyte *)0)
             {
-                create_free_block(lastheader, firstsize, (ubyte *)0);
+                create_free_block(lastheader, firstsize, (ubyte *)0, (ubyte *)0);
             }
             else
             {
-                create_free_block(curheader, blocksize, (ubyte *)0);
+                create_free_block(curheader, blocksize, nextheader, end);
             }
 
             return 1;

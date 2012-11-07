@@ -59,7 +59,7 @@ void show_array()
     
     for (int i = 0; i < 60; i++)
     {
-        printf("%d\n", barray[i]);
+        printf("%p: %d\n", &barray[i], barray[i]);
         
         fours++;
         if (fours == 4)
