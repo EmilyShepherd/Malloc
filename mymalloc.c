@@ -164,6 +164,7 @@ int header_size(int headerval)
 unsigned char* create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
 {
     ubyte *nextheader  = endspace + 1;
+    int blocksizebytes = endspace - barray + 1;
     
     //Pass next header?
     //Check if next block(s) is free
@@ -176,7 +177,8 @@ unsigned char* create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
             
             if (decode_header((int *)nextheader, &nextblocksize, &nextheadersize))
             {
-                nextheader += 4 * nextblocksize + nextheadersize;
+                nextheader     += 4 * nextblocksize + nextheadersize;
+                blocksizebytes += 4 * nextblocksize + nextheadersize;
             }
             else
             {
@@ -185,7 +187,6 @@ unsigned char* create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
         }
     }
     
-    int blocksizebytes = nextheader - 1 - barray;
     int blocksize      = blocksizebytes / 4;
     int extrabytes     = blocksizebytes - blocksize * 4;
 
@@ -212,7 +213,7 @@ unsigned char* create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
     {
         endofblock[0] = 64;
     }
-    else
+    else if (extrabytes != 0)
     {
         endofblock[0]= 0xC0;
         for (int i=1; i<extrabytes - 1; i++)
@@ -236,7 +237,7 @@ int myinit(int *array, int size)
     //Save the total size of the memory
     *array = size;
     
-    create_free_block(barray + 4, barray + array[0] * 4, barray + array[0] * 4);
+    create_free_block(barray + 4, barray + array[0] * 4 - 1, barray + array[0] * 4);
 
     return 1;
 }

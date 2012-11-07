@@ -90,8 +90,18 @@ void init(int size)
 int main()
 {
 	init(15);
+	
+	malloc_test(3);
+	int *p = malloc_test(2);
+	malloc_test(1);
 
 	show_array();
+	
+	free_test(p, 2);
+
+	show_array();
+
+	if (*p) {}
   
 	return 0;
 }
