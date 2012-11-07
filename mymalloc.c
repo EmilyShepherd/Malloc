@@ -190,7 +190,7 @@ unsigned char* create_free_block(ubyte *barray, int blocksize, ubyte *nextheader
     {
         barray   += 4*blocksize - 3;
         barray[0] = 0xC0;
-        barray[1] = 0;
+        barray[1] = 0x80;
         barray[2] = 0;
     }
 
