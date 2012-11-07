@@ -190,27 +190,7 @@ unsigned char* create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
     int extrabytes     = blocksizebytes - blocksize * 4;
 
     int headersize = header_size(blocksize);
-    //int headersize = encode_header((int *)barray, 1, blocksize - 1);
     ubyte* sarray  = barray;
-
-    /* if (headersize == 3)
-    {
-        barray   += 4*blocksize - 1;
-        barray[0] = 64;
-    }
-    else if (headersize == 2)
-    {
-        barray   += 4*blocksize - 2;
-        barray[0] = 0xC0;
-        barray[1] = 0;
-    }
-    else if (headersize == 1)
-    {
-        barray   += 4*blocksize - 3;
-        barray[0] = 0xC0;
-        barray[1] = 0x80;
-        barray[2] = 0;
-    } */
 
     if (extrabytes==0 && headersize==sizeof(int)+1)
     {
@@ -224,6 +204,23 @@ unsigned char* create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
     }
 
     encode_header((int *)barray, 1, blocksize);
+
+    extrabytes-=headersize;
+    ubyte* endofblock = barray+headersize+(4*blocksize);
+
+    if (extrabytes == 1)
+    {
+        endofblock[1] = 64;
+    }
+    else
+    {
+        endofblock[1]= 0xC0;
+        for (int i=2; i<extrabytes; i++)
+        {
+            endofblock[i]=0x80;
+        }
+        endofblock[extrabytes]=0;
+    }
 
     return sarray + headersize;
 }
