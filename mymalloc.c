@@ -318,7 +318,7 @@ int myfree(int *array, int *block)
             lastheader = curheader;
             //firstsize  = blocksize;
         }
-        else
+        else if (!free)
         {
             lastheader = (ubyte *)0;
         }
