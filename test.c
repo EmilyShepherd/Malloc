@@ -89,16 +89,9 @@ void init(int size)
 
 int main()
 {
-	//init(15);
-	
-printf("Header size 4 10: %d\n", header_size(10));
-	printf("Header size 4 63: %d\n", header_size(63));
-	printf("Header size 4 64: %d\n", header_size(64));
-printf("Header size 4 70: %d\n", header_size(70));
-printf("Header size 4 2000: %d\n", header_size(2000));
-printf("Header size 4 8000: %d\n", header_size(8000));
-printf("Header size 4 8191: %d\n", header_size(8191));
-printf("Header size 4 8192: %d\n", header_size(8192));
+	init(15);
+
+	show_array();
   
 	return 0;
 }

@@ -210,16 +210,16 @@ unsigned char* create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
 
     if (extrabytes == 1)
     {
-        endofblock[1] = 64;
+        endofblock[0] = 64;
     }
     else
     {
-        endofblock[1]= 0xC0;
-        for (int i=2; i<extrabytes; i++)
+        endofblock[0]= 0xC0;
+        for (int i=1; i<extrabytes - 1; i++)
         {
             endofblock[i]=0x80;
         }
-        endofblock[extrabytes]=0;
+        endofblock[extrabytes - 1]=0;
     }
 
     return sarray + headersize;
