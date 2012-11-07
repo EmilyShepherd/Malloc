@@ -321,16 +321,12 @@ int myfree(int *array, int *block)
             if (free) return 0;
             
             ubyte *nextheader = curheader + headersize + 4 * blocksize;
-            if (nextheader >= end)
-            {
-                nextheader = (ubyte *)0;
-            }
 
             //We have a free block(s) above us, we will define one big
             //free block encompassing all of it
-            if (0 && lastheader != (ubyte *)0)
+            if (lastheader != (ubyte *)0)
             {
-                //create_free_block(lastheader, firstsize, (ubyte *)0);
+                create_free_block(lastheader, nextheader-1, end);
             }
             else
             {

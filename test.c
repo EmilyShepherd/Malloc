@@ -93,13 +93,18 @@ int main()
 	
 	malloc_test(3);
 	int *p = malloc_test(2);
-	malloc_test(1);
+	int *p2 = malloc_test(1);
+	int *p3 = malloc_test(4);
 
-	show_array();
+	//show_array();
 	
+        //free_test(p2, 1);
 	free_test(p, 2);
+        free_test(p2, 1);
+        free_test(p3, 4);
+        //free_test(p, 2);
 
-	malloc_test(1);
+	//malloc_test(1);
 
 	show_array();
 
