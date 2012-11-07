@@ -4,30 +4,6 @@
 typedef unsigned char ubyte;
 
 /*
- * @depreciated
- */
-int inc_header(int *array, int *curheader)
-{
-    if (array[*curheader] < 0)
-    {
-        *curheader += -1*array[*curheader] + 1;
-    }
-    else
-    {
-        *curheader += array[*curheader] + 1;
-    }
-
-    if (*curheader >= array[0])
-    {
-        return 0;
-    }
-    else
-    {
-        return 1;
-    }
-}
-
-/*
  * Reads a header, returning whether it is free or not, and setting the
  * passed blocksize to be the size of the header's block.
  *

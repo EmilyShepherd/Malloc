@@ -1,10 +1,11 @@
 #include <stdio.h>
 
 //Steal the inner function used by our mymalloc and myfree functions
-int inc_header(int *, int *);
 
 void gui_show_array(int *array)
 {
+printf("Don't run yet, broken");
+return;
     int curheader = 1;
     
     printf("+-------------------------------------+\n");
@@ -56,6 +57,6 @@ void gui_show_array(int *array)
         
         printf("+-------------------------------------+\n");
 
-        if (!inc_header(array, &curheader)) return;
+        //if (!inc_header(array, &curheader)) return;
     }
 }
