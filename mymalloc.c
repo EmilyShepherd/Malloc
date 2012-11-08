@@ -181,7 +181,7 @@ void create_free_block(ubyte *barray, ubyte* endspace, ubyte* end)
 
     if (blocksize != 0)
     {
-        encode_header((int *)barray, 1, blocksize);
+        headersize = encode_header((int *)barray, 1, blocksize);
 
         extrabytes -= headersize;
     }
