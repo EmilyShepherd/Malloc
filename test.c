@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include "mymalloc.h"
 #include "mymalloc.c"
+#include "GUIView.c"
 
 int *array;
 
-int* malloc_test(int *array, int size, int id)
+int* malloc_test(int *array, int size)
 {
     int *newArray = mymalloc(array, size);
     
@@ -17,7 +18,7 @@ int* malloc_test(int *array, int size, int id)
     
     for (int i = 0; i < size; i++)
     {
-        newArray[i] = id;
+        newArray[i] = 999;
     }
     
     return newArray;
@@ -71,12 +72,12 @@ int main()
 {
 	init(50);
   
-	malloc_test(array, 50, 101);
-	malloc_test(array, 49, 101);
-	malloc_test(array, 48, 101);
-	malloc_test(array, 47, 101);
+	malloc_test(array, 50);
+	malloc_test(array, 49);
+	malloc_test(array, 48);
+	malloc_test(array, 47);
 	
-	show_array();
+	gui_show_array(array);
   
 	return 0;
 }
