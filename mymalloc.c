@@ -1,7 +1,7 @@
 #include "mymalloc.h"
 #include <pthread.h>
 
-pthread_mutex_t mutex;
+static pthread_mutex_t mutex;
 
 static int inc_header(int *array, int *curheader)
 {
