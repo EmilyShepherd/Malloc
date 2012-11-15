@@ -1,8 +1,6 @@
 #include <stdio.h>
 
 //Steal the inner function used by our mymalloc and myfree functions
-int inc_header(int *, int *);
-
 void gui_show_array(int *array)
 {
     int curheader = 1;

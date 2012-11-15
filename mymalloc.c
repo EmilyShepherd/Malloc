@@ -3,7 +3,7 @@
 
 pthread_mutex_t mutex;
 
-int inc_header(int *array, int *curheader)
+static int inc_header(int *array, int *curheader)
 {
 	if (array[*curheader] < 0)
 	{
