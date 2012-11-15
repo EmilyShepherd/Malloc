@@ -34,35 +34,52 @@ int myinit(int *array, int size)
 
 int* mymalloc(int *array, int size)
 {
-	int curheader = 1;
+	int curheader   = 1;
+	int bestheader  = 0;
+	int bestsize    = array[0];
+	int wasteheader = 0;
 
 	while (1)
 	{
 		// positive header int, implies free space of this size
 		if (array[curheader] >= size)
 		{
-			
-			if (size + 1 < array[curheader])
+			//Perfect fit, use it.
+			if (size == array[curheader])
 			{
-				// Allocate space, then put header after data for new section of free data
-				array[curheader + size + 1] = array[curheader] - size - 1;
-				array[curheader] = -1*size;
-
-			} 
-			else
-			{
-				// No size for a new header, the entire array is being used
-				array[curheader] *= -1; 	
+				array[curheader] *= -1;
+				return &array[curheader+1];
 			}
-
-			return &array[curheader+1];
+			else if (size + 1 == array[curheader])
+			{
+				wasteheader = curheader;
+			}
+			else if (array[curheader] < bestsize)
+			{
+				bestheader = curheader;
+				bestsize   = array[curheader];
+			}
 		}
 
-		if (!inc_header(array, &curheader)) return (int *) 0;
+		if (!inc_header(array, &curheader)) break; //return (int *) 0;
 	} 
 
+	if (bestheader != 0)
+	{
+		// Allocate space, then put header after data for new section of free data
+		array[bestheader + size + 1] = array[bestheader] - size - 1;
+		array[bestheader] = -1*size;
 
+		return &array[bestheader+1];
+	}
+	else if (wasteheader != 0)
+	{
+		array[wasteheader] *= -1;
 
+		return &array[wasteheader+1];
+	}
+
+	return (int *)0;
 }
 
 int myfree(int *array, int *block)

@@ -72,10 +72,11 @@ int main()
 {
 	init(50);
   
-	malloc_test(array, 50);
-	malloc_test(array, 49);
-	malloc_test(array, 48);
-	malloc_test(array, 47);
+	int *p = malloc_test(array, 5);
+	malloc_test(array, 10);
+	free_test(array, p, 5);
+	malloc_test(array, 4);
+	
 	
 	gui_show_array(array);
   
