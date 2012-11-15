@@ -132,3 +132,9 @@ int mydispose(int *array)
 	return 0; 
 }
 
+int mt_myinit(int *array, int size){ return 0;}
+int* mt_mymalloc(int *array, int size){ return (int*) 0; }
+int mt_myfree(int *array, int *block){ return 0;}
+int mt_mydispose(int *array){ return 0;}
+
+
