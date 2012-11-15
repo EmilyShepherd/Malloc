@@ -1,4 +1,7 @@
 #include "mymalloc.h"
+#include <pthread.h>
+
+pthread_mutex_t mutex;
 
 int inc_header(int *array, int *curheader)
 {
@@ -132,9 +135,40 @@ int mydispose(int *array)
 	return 0; 
 }
 
-int myinit_mt(int *array, int size){ return 0;}
-int* mymalloc_mt(int *array, int size){ return (int*) 0; }
-int myfree_mt(int *array, int *block){ return 0;}
-int mydispose_mt(int *array){ return 0;}
+int myinit_mt(int *array, int size)
+{
+	pthread_mutex_lock(&mutex);
+	int result = myinit(array, size);
+	pthread_mutex_unlock(&mutex);
+
+	return result;
+}
+
+int* mymalloc_mt(int *array, int size)
+{
+	pthread_mutex_lock(&mutex);
+	int *result = mymalloc(array, size);
+	pthread_mutex_unlock(&mutex);
+
+	return result;
+}
+
+int myfree_mt(int *array, int *block)
+{
+	pthread_mutex_lock(&mutex);
+	int result = myfree(array, block);
+	pthread_mutex_unlock(&mutex);
+
+	return result;
+}
+
+int mydispose_mt(int *array)
+{
+	pthread_mutex_lock(&mutex);
+	int result = mydispose(array);
+	pthread_mutex_unlock(&mutex);
+
+	return result;
+}
 
 
