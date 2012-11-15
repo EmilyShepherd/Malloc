@@ -3,7 +3,7 @@ int* mymalloc(int *, int);
 int mydispose(int *);
 int myfree(int *, int *);
 
-int mt_myinit(int *, int);
-int* mt_mymalloc(int *, int);
-int mt_mydispose(int *);
-int mt_myfree(int *, int *);
+int myinit_mt(int *, int);
+int* mymalloc_mt(int *, int);
+int mydispose_mt(int *);
+int myfree_mt(int *, int *);
