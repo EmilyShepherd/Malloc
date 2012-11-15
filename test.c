@@ -2,13 +2,10 @@
 #include <stdlib.h>
 #include "mymalloc.h"
 #include "mymalloc.c"
-#include "GUIview.c"
-
-int header_size(int);
 
 int *array;
 
-int* malloc_test(int size)
+int* malloc_test(int *array, int size, int id)
 {
     int *newArray = mymalloc(array, size);
     
@@ -20,45 +17,28 @@ int* malloc_test(int size)
     
     for (int i = 0; i < size; i++)
     {
-        newArray[i] = 0x63636363;
+        newArray[i] = id;
     }
     
     return newArray;
 }
 
-void free_test(int *block, int size)
-{    
+int free_test(int *array, int *block, int size)
+{
     for (int i = 0; i < size; i++)
     {
         block[i] = 0;
     }
     
-    if (!myfree(array, block))
-    {
-        printf("!!! Couldn't free memory !!!");
-    }
+    return myfree(array, block);
 }
 
 void show_array()
 {
-    unsigned char *barray = (unsigned char *)array;
-    int fours = 0;
-    int ints  = 0;
-    
-    printf("\n\nArray Dump:\n\n");
-    
-    for (int i = 0; i < 60; i++)
-    {
-        printf("%p: %d\n", &barray[i], barray[i]);
-        
-        fours++;
-        if (fours == 4)
-        {
-            ints++;
-            fours = 0;
-            printf("%d ------------\n", ints);
-        }
-    }
+	for (int i = 0; i < 100; i++)
+	{
+		printf("%d: %d\n", i, array[i]);
+	}
 }
 
 void init(int size)
@@ -89,30 +69,14 @@ void init(int size)
 
 int main()
 {
-	init(15);
+	init(50);
+  
+	malloc_test(array, 50, 101);
+	malloc_test(array, 49, 101);
+	malloc_test(array, 48, 101);
+	malloc_test(array, 47, 101);
 	
-	malloc_test(3);
-	int *p = malloc_test(2);
-	int *p2 = malloc_test(1);
-
-	int *p3 = malloc_test(4);
-
-	//show_array();
-	
-        //free_test(p2, 1);
-	free_test(p, 2);
-        free_test(p2, 1);
-
 	show_array();
-
-        free_test(p3, 4);
-        //free_test(p, 2);
-
-	//malloc_test(1);
-
-	show_array();
-
-	if (*p) {}
   
 	return 0;
 }
