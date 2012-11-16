@@ -64,12 +64,13 @@ int* mymalloc(int *array, int size)
             }
         }
 
-        if (!inc_header(array, &curheader)) break; //return (int *) 0;
+        if (!inc_header(array, &curheader)) break;
     } 
 
     if (bestheader != 0)
     {
-        // Allocate space, then put header after data for new section of free data
+        //Allocate space, then put header after data for new section of
+        //free data
         array[bestheader + size + 1] = array[bestheader] - size - 1;
         array[bestheader] = -1*size;
 
@@ -129,9 +130,16 @@ int myfree(int *array, int *block)
 
 int mydispose(int *array)
 {
-    // Return one if free space pointer correctly pointers to the rest of the array
-    if (array[1] == array[0] - 2) return 1;
-    return 0; 
+    //Return one if free space pointer correctly pointers to the rest of
+    //the array
+    if (array[1] == array[0] - 2)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 int myinit_mt(int *array, int size)
