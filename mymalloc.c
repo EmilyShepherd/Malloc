@@ -37,6 +37,8 @@ int myinit(int *array, int size)
 
 int* mymalloc(int *array, int size)
 {
+    if (size <= 0 || size >= array[0]) return (int *)0;
+    
     int curheader   = 1;
     int bestheader  = 0;
     int bestsize    = array[0];
