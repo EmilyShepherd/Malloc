@@ -90,6 +90,8 @@ int* mymalloc(int *array, int size)
 
 int myfree(int *array, int *block)
 {
+    if (block <= array || block >= array + array[0]) return 0;
+    
     int curheader  = 1;
     int lastheader = 0;
 
@@ -126,7 +128,7 @@ int myfree(int *array, int *block)
 
         //Save this header and move unto the next one
         lastheader = curheader;
-        if (!inc_header(array, &curheader)) return 0;
+        if (!inc_header(array, &curheader) || &array[curheader] > block) return 0;
     }
 }
 
