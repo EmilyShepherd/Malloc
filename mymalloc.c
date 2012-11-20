@@ -3,6 +3,11 @@
 
 static pthread_mutex_t mutex;
 
+
+// ah16g11 & ams2g11
+// (Words explaining our solution)
+
+
 static int inc_header(int *array, int *curheader)
 {
     if (array[*curheader] < 0)
@@ -26,10 +31,13 @@ static int inc_header(int *array, int *curheader)
 
 int myinit(int *array, int size)
 {
+    // Arbitary size chosen for returning 0
     if (size < 14) return 0;
 
+    // Put size of array into first position
     array[0] = size;
 
+    // Make the rest of the array into a free block
     array[1] = size - 2;
 
     return 1;
