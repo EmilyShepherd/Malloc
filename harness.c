@@ -11,7 +11,6 @@ static int * pointers[PSIZE];
 static int valid_pointers=0;
 static int count = 0;
  
-static int sizes[PSIZE];
 static int valid_sizes=0;
 static int freeSpace = SIZE;
  

@@ -159,6 +159,10 @@ int myfree(int *array, int *block)
     //obviously wrong
     if (block <= array || block >= array + array[0]) return 0;
     
+    //If the space before the pointer is not a negative non-zero
+    //value, we know it's not a free block header
+    if (*(block - 1) >= 0) return 0;
+    
     int curheader  = 1;
     int lastheader = 0;
 
