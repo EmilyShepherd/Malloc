@@ -156,6 +156,7 @@ int mydispose(int *array)
 
 int myinit_mt(int *array, int size)
 {
+    // Lock around myinit
     pthread_mutex_lock(&mutex);
     int result = myinit(array, size);
     pthread_mutex_unlock(&mutex);
@@ -165,6 +166,7 @@ int myinit_mt(int *array, int size)
 
 int* mymalloc_mt(int *array, int size)
 {
+    // Lock around mymalloc
     pthread_mutex_lock(&mutex);
     int *result = mymalloc(array, size);
     pthread_mutex_unlock(&mutex);
@@ -174,6 +176,7 @@ int* mymalloc_mt(int *array, int size)
 
 int myfree_mt(int *array, int *block)
 {
+    // Lock around myfree
     pthread_mutex_lock(&mutex);
     int result = myfree(array, block);
     pthread_mutex_unlock(&mutex);
@@ -183,6 +186,7 @@ int myfree_mt(int *array, int *block)
 
 int mydispose_mt(int *array)
 {
+    // Lock around my dispose
     pthread_mutex_lock(&mutex);
     int result = mydispose(array);
     pthread_mutex_unlock(&mutex);
