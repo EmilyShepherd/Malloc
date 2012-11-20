@@ -10,6 +10,7 @@ static pthread_mutex_t mutex;
 
 static int inc_header(int *array, int *curheader)
 {
+    // Jump to the next header
     if (array[*curheader] < 0)
     {
         *curheader += -1*array[*curheader] + 1;
@@ -19,6 +20,7 @@ static int inc_header(int *array, int *curheader)
         *curheader += array[*curheader] + 1;
     }
 
+    // If header is outside of the array, there are no more blocks
     if (*curheader >= array[0])
     {
         return 0;
@@ -31,8 +33,8 @@ static int inc_header(int *array, int *curheader)
 
 int myinit(int *array, int size)
 {
-    // Arbitary size chosen for returning 0
-    if (size < 14) return 0;
+    // Smallest size available chosen to be usable, otherwise return 0
+    if (size < 3) return 0;
 
     // Put size of array into first position
     array[0] = size;
@@ -45,6 +47,7 @@ int myinit(int *array, int size)
 
 int* mymalloc(int *array, int size)
 {
+    // Validates given size
     if (size <= 0 || size >= array[0]) return (int *)0;
     
     int curheader   = 1;
@@ -63,10 +66,12 @@ int* mymalloc(int *array, int size)
                 array[curheader] *= -1;
                 return &array[curheader+1];
             }
+            // Int space will be wasted
             else if (size + 1 == array[curheader])
             {
                 wasteheader = curheader;
             }
+            // Space is bigger than needed
             else if (array[curheader] < bestsize)
             {
                 bestheader = curheader;
@@ -86,6 +91,7 @@ int* mymalloc(int *array, int size)
 
         return &array[bestheader+1];
     }
+    // If only space avaialable will waste an int
     else if (wasteheader != 0)
     {
         array[wasteheader] *= -1;
