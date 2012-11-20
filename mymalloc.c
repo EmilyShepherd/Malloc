@@ -5,7 +5,7 @@ static pthread_mutex_t mutex;
 
 
 // ah16g11 & ams2g11
-// (Words explaining our solution)
+// Our solution uses a single integer as a header for each block of allocated data. The size of each block is the absolute value of the integer. Positive integer headers indicate that the block is free, while negative integer headers indicate used blocks. The first integer in the array is used to store the total size of the array, and the second space is used as the first header. Initially this header represents a block which takes up the remaining space of the array (total size - 2). When space is allocated, the free block is split into the allocated block of required size and a new free block bellow it, with the exception of the case when the free block is the required size + 1, in this case, the extra integer is allocated to the block as well, because it can't be used for anything. We've improved this by using best fit, instead of first fit. When freeing a block, it will be combined with other free blocks either side of it, if such blocks exist. My free has to iterate across the entire array to confirm that a given pointer is the start of a valid block.
 
 
 static int inc_header(int *array, int *curheader)
